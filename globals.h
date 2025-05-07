@@ -7,6 +7,7 @@
 #include <string>
 #include <cstddef>
 #include <cmath>
+#include "enemies_controller.h"
 
 /* Game Elements */
 
@@ -127,14 +128,14 @@ inline const int MAX_PLAYER_LIVES = 3;
 inline int player_lives = MAX_PLAYER_LIVES;
 
 /* Enemy data */
-
+/*
 struct Enemy {
     Vector2 pos;
     bool is_looking_right;
 };
 
 inline std::vector<Enemy> enemies;
-
+*/
 /* Graphic Metrics */
 
 // UI
@@ -347,14 +348,14 @@ void update_player();
 void update_player_gravity();
 
 // ENEMY_H
-
+/*
 void spawn_enemies();
 
 void update_enemies();
 
 bool is_colliding_with_enemies(Vector2 pos);
 void remove_colliding_enemy(Vector2 pos);
-
+*/
 // ASSETS_H
 
 void load_fonts();
