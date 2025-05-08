@@ -114,7 +114,7 @@ inline const float BOUNCE_OFF_ENEMY      = 0.1f;
 inline const float GRAVITY_FORCE         = 0.01f;
 
 /* Player data */
-
+/*
 inline float player_y_velocity = 0;
 inline Vector2 player_pos;
 
@@ -126,7 +126,7 @@ inline int player_level_scores[LEVEL_COUNT];
 
 inline const int MAX_PLAYER_LIVES = 3;
 inline int player_lives = MAX_PLAYER_LIVES;
-
+*/
 /* Enemy data */
 /*
 struct Enemy {
@@ -336,16 +336,16 @@ void set_level_cell(size_t row, size_t column, char chr);
 
 // PLAYER_H
 
-void reset_player_stats();
-void increment_player_score();
-int get_total_player_score();
-
-void spawn_player();
-void kill_player();
-
-void move_player_horizontally(float delta);
-void update_player();
-void update_player_gravity();
+// void reset_player_stats();
+// void increment_player_score();
+// int get_total_player_score();
+//
+// void spawn_player();
+// void kill_player();
+//
+// void move_player_horizontally(float delta);
+// void update_player();
+// void update_player_gravity();
 
 // ENEMY_H
 /*
