@@ -1,7 +1,7 @@
 #ifndef PLAYER_CONTROLLER_H
 #define PLAYER_CONTROLLER_H
 #include"player.h"
-#include"globals.h"
+#include "level.h"
 
 
 class PlayerController
@@ -48,7 +48,5 @@ private:
     Player player;
 
 };
-
-
 
 #endif
