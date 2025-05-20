@@ -1,6 +1,7 @@
 #include "globals.h"
 #include "player.h"
 #include "player_controller.h"
+#include "level_manager.h"
 
 void PlayerController::reset_player_stats() {
     player_lives = MAX_PLAYER_LIVES;
@@ -27,8 +28,8 @@ int PlayerController::get_total_player_score() const {
 void PlayerController::spawn_player() {
     player.set_player_y_velocity(0);
 
-    for (size_t row = 0; row < current_level.get_rows(); ++row) {
-        for (size_t column = 0; column < current_level.get_columns(); ++column) {
+    for (size_t row = 0; row < LevelManager::get_instance().get_current_level().get_rows(); ++row) {
+        for (size_t column = 0; column < LevelManager::get_instance().get_current_level().get_columns(); ++column) {
             char cell = LevelManager::get_instance().get_level_cell(row, column);;
 
             if (cell == PLAYER) {
@@ -123,7 +124,7 @@ void PlayerController::update_player() {
     // Kill the player if they touch a spike or fall below the level
     if (LevelManager::get_instance().
 
-    is_colliding(player.get_player_pos(), SPIKE) || player.get_player_pos().y > current_level.get_rows()) {
+    is_colliding(player.get_player_pos(), SPIKE) || player.get_player_pos().y > LevelManager::get_instance().get_current_level().get_rows()) {
         kill_player();
     }
 

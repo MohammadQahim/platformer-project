@@ -1,0 +1,60 @@
+<html>
+<head>
+<title>enemies_controller.h</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #b3ae60;}
+.s1 { color: #bcbec4;}
+.s2 { color: #6aab73;}
+.s3 { color: #cf8e6d;}
+.s4 { color: #bcbec4;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+enemies_controller.h</font>
+</center></td></tr></table>
+<pre><span class="s0">#ifndef </span><span class="s1">ENEMIES_CONTROLLER_H</span>
+<span class="s0">#define </span><span class="s1">ENEMIES_CONTROLLER_H</span>
+<span class="s0">#include </span><span class="s2">&quot;raylib.h&quot;</span>
+<span class="s0">#include </span><span class="s2">&lt;vector&gt;</span>
+<span class="s0">#include </span><span class="s2">&quot;enemy.h&quot;</span>
+
+<span class="s3">class </span><span class="s1">EnemiesController </span><span class="s4">{</span>
+<span class="s3">public</span><span class="s1">:</span>
+    <span class="s3">static </span><span class="s1">EnemiesController </span><span class="s4">&amp;</span><span class="s1">get_instance</span><span class="s4">()</span>
+    <span class="s4">{</span>
+        <span class="s3">static </span><span class="s1">EnemiesController instance</span><span class="s4">;</span>
+        <span class="s3">return </span><span class="s1">instance</span><span class="s4">;</span>
+    <span class="s4">}</span>
+
+    <span class="s1">EnemiesController</span><span class="s4">(</span><span class="s3">const </span><span class="s1">EnemiesController </span><span class="s4">&amp;) = </span><span class="s3">delete</span><span class="s4">;</span>
+    <span class="s1">EnemiesController </span><span class="s3">operator</span><span class="s4">=(</span><span class="s3">const </span><span class="s1">EnemiesController </span><span class="s4">&amp;) = </span><span class="s3">delete</span><span class="s4">;</span>
+    <span class="s1">EnemiesController</span><span class="s4">(</span><span class="s1">EnemiesController </span><span class="s4">&amp;&amp;) = </span><span class="s3">delete</span><span class="s4">;</span>
+    <span class="s1">EnemiesController </span><span class="s3">operator</span><span class="s4">=(</span><span class="s1">EnemiesController </span><span class="s4">&amp;&amp;) = </span><span class="s3">delete</span><span class="s4">;</span>
+
+    <span class="s4">[[</span><span class="s1">nodiscard</span><span class="s4">]] </span><span class="s3">const </span><span class="s1">std::vector</span><span class="s4">&lt;</span><span class="s1">Enemy</span><span class="s4">&gt; &amp; </span><span class="s1">get_enemies</span><span class="s4">() </span><span class="s3">const </span><span class="s4">{</span>
+        <span class="s3">return </span><span class="s1">enemies</span><span class="s4">;</span>
+    <span class="s4">}</span>
+
+    <span class="s3">void </span><span class="s1">spawn_enemies</span><span class="s4">();</span>
+    <span class="s3">void </span><span class="s1">update_enemies</span><span class="s4">();</span>
+    <span class="s3">bool </span><span class="s1">is_colliding_with_enemies</span><span class="s4">(</span><span class="s1">Vector2 pos</span><span class="s4">) </span><span class="s3">const</span><span class="s4">;</span>
+    <span class="s3">void </span><span class="s1">remove_colliding_enemy</span><span class="s4">(</span><span class="s1">Vector2 pos</span><span class="s4">);</span>
+
+
+<span class="s3">private</span><span class="s1">:</span>
+
+    <span class="s1">EnemiesController</span><span class="s4">() = </span><span class="s3">default</span><span class="s4">;</span>
+    <span class="s1">~EnemiesController</span><span class="s4">() = </span><span class="s3">default</span><span class="s4">;</span>
+
+    <span class="s1">std::vector</span><span class="s4">&lt;</span><span class="s1">Enemy</span><span class="s4">&gt; </span><span class="s1">enemies</span><span class="s4">;</span>
+
+<span class="s4">};</span>
+
+<span class="s0">#endif</span>
+</pre>
+</body>
+</html>

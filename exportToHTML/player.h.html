@@ -1,0 +1,100 @@
+<html>
+<head>
+<title>player.h</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #b3ae60;}
+.s1 { color: #bcbec4;}
+.s2 { color: #6aab73;}
+.s3 { color: #cf8e6d;}
+.s4 { color: #bcbec4;}
+.s5 { color: #2aacb8;}
+.s6 { color: #7a7e85;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+player.h</font>
+</center></td></tr></table>
+<pre><span class="s0">#ifndef </span><span class="s1">PLAYER_H</span>
+<span class="s0">#define </span><span class="s1">PLAYER_H</span>
+<span class="s0">#include </span><span class="s2">&quot;raylib.h&quot;</span>
+<span class="s0">#include </span><span class="s2">&quot;enemies_controller.h&quot;</span>
+
+
+<span class="s3">class </span><span class="s1">Player</span>
+<span class="s4">{</span>
+<span class="s3">public</span><span class="s1">:</span>
+    <span class="s1">Player</span><span class="s4">(</span><span class="s3">const float </span><span class="s1">player_y_velocity</span><span class="s4">, </span><span class="s3">const </span><span class="s1">Vector2 </span><span class="s4">&amp;</span><span class="s1">player_pos</span><span class="s4">, </span><span class="s3">const bool </span><span class="s1">player_on_ground</span><span class="s4">,</span>
+       <span class="s3">const bool </span><span class="s1">looking_forward</span><span class="s4">, </span><span class="s3">const bool </span><span class="s1">moving</span><span class="s4">)</span>
+    <span class="s1">: player_y_velocity</span><span class="s4">(</span><span class="s1">player_y_velocity</span><span class="s4">),</span>
+      <span class="s1">player_pos</span><span class="s4">(</span><span class="s1">player_pos</span><span class="s4">),</span>
+      <span class="s1">player_on_ground</span><span class="s4">(</span><span class="s1">player_on_ground</span><span class="s4">),</span>
+      <span class="s1">looking_forward</span><span class="s4">(</span><span class="s1">looking_forward</span><span class="s4">),</span>
+      <span class="s1">moving</span><span class="s4">(</span><span class="s1">moving</span><span class="s4">) { }</span>
+
+    <span class="s1">Player</span><span class="s4">() = </span><span class="s3">default</span><span class="s4">;</span>
+
+    <span class="s4">[[</span><span class="s1">nodiscard</span><span class="s4">]] </span><span class="s3">float </span><span class="s1">get_player_y_velocity</span><span class="s4">() </span><span class="s3">const </span><span class="s4">{</span>
+        <span class="s3">return </span><span class="s1">player_y_velocity</span><span class="s4">;</span>
+    <span class="s4">}</span>
+
+    <span class="s4">[[</span><span class="s1">nodiscard</span><span class="s4">]] </span><span class="s1">Vector2 get_player_pos</span><span class="s4">() </span><span class="s3">const </span><span class="s4">{</span>
+        <span class="s3">return </span><span class="s1">player_pos</span><span class="s4">;</span>
+    <span class="s4">}</span>
+
+    <span class="s3">void </span><span class="s1">set_player_y_velocity</span><span class="s4">(</span><span class="s3">const float </span><span class="s1">player_y_velocity</span><span class="s4">) {</span>
+        <span class="s3">this</span><span class="s4">-&gt;</span><span class="s1">player_y_velocity </span><span class="s4">= </span><span class="s1">player_y_velocity</span><span class="s4">;</span>
+    <span class="s4">}</span>
+
+    <span class="s3">void </span><span class="s1">set_player_pos</span><span class="s4">(</span><span class="s3">const </span><span class="s1">Vector2 </span><span class="s4">&amp;</span><span class="s1">player_pos</span><span class="s4">) {</span>
+        <span class="s3">this</span><span class="s4">-&gt;</span><span class="s1">player_pos </span><span class="s4">= </span><span class="s1">player_pos</span><span class="s4">;</span>
+    <span class="s4">}</span>
+
+    <span class="s3">void </span><span class="s1">set_player_x</span><span class="s4">(</span><span class="s3">float </span><span class="s1">x</span><span class="s4">) {</span>
+        <span class="s1">player_pos</span><span class="s4">.</span><span class="s1">x </span><span class="s4">= </span><span class="s1">x</span><span class="s4">;</span>
+    <span class="s4">}</span>
+
+    <span class="s3">void </span><span class="s1">set_player_y</span><span class="s4">(</span><span class="s3">float </span><span class="s1">y</span><span class="s4">) {</span>
+        <span class="s1">player_pos</span><span class="s4">.</span><span class="s1">y </span><span class="s4">= </span><span class="s1">y</span><span class="s4">;</span>
+    <span class="s4">}</span>
+
+    <span class="s4">[[</span><span class="s1">nodiscard</span><span class="s4">]] </span><span class="s3">bool </span><span class="s1">is_player_on_ground</span><span class="s4">() </span><span class="s3">const </span><span class="s4">{</span>
+        <span class="s3">return </span><span class="s1">player_on_ground</span><span class="s4">;</span>
+    <span class="s4">}</span>
+
+    <span class="s4">[[</span><span class="s1">nodiscard</span><span class="s4">]] </span><span class="s3">bool </span><span class="s1">is_looking_forward</span><span class="s4">() </span><span class="s3">const </span><span class="s4">{</span>
+        <span class="s3">return </span><span class="s1">looking_forward</span><span class="s4">;</span>
+    <span class="s4">}</span>
+
+    <span class="s4">[[</span><span class="s1">nodiscard</span><span class="s4">]] </span><span class="s3">bool </span><span class="s1">is_moving</span><span class="s4">() </span><span class="s3">const </span><span class="s4">{</span>
+        <span class="s3">return </span><span class="s1">moving</span><span class="s4">;</span>
+    <span class="s4">}</span>
+
+    <span class="s3">void </span><span class="s1">set_player_on_ground</span><span class="s4">(</span><span class="s3">bool </span><span class="s1">on_ground</span><span class="s4">) {</span>
+        <span class="s1">player_on_ground </span><span class="s4">= </span><span class="s1">on_ground</span><span class="s4">;</span>
+    <span class="s4">}</span>
+
+    <span class="s3">void </span><span class="s1">set_looking_forward</span><span class="s4">(</span><span class="s3">bool </span><span class="s1">forward</span><span class="s4">) {</span>
+        <span class="s1">looking_forward </span><span class="s4">= </span><span class="s1">forward</span><span class="s4">;</span>
+    <span class="s4">}</span>
+
+    <span class="s3">void </span><span class="s1">set_moving</span><span class="s4">(</span><span class="s3">bool </span><span class="s1">is_moving</span><span class="s4">) {</span>
+        <span class="s1">moving </span><span class="s4">= </span><span class="s1">is_moving</span><span class="s4">;</span>
+    <span class="s4">}</span>
+
+<span class="s3">private</span><span class="s1">:</span>
+    <span class="s3">float </span><span class="s1">player_y_velocity </span><span class="s4">= </span><span class="s5">0</span><span class="s4">;</span>
+    <span class="s1">Vector2 player_pos</span><span class="s4">;</span>
+    <span class="s3">bool </span><span class="s1">player_on_ground</span><span class="s4">;</span>
+    <span class="s3">bool </span><span class="s1">looking_forward</span><span class="s4">;</span>
+    <span class="s3">bool </span><span class="s1">moving</span><span class="s4">;</span>
+
+<span class="s4">};</span>
+
+<span class="s0">#endif </span><span class="s6">//PLAYER_H</span>
+</pre>
+</body>
+</html>

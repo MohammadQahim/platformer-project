@@ -17,8 +17,12 @@ public:
     LevelManager(LevelManager &&) = delete;
     LevelManager operator=(LevelManager &&) = delete;
 
-    [[nodiscard]] std::vector<Level> get_levels() const {
-        return levels;
+    [[nodiscard]] Level get_current_level() const {
+        return current_level;
+    }
+
+    [[nodiscard]] char * get_current_level_data() const {
+        return current_level_data;
     }
 
     bool is_inside_level(int row, int column);
@@ -34,7 +38,8 @@ private:
     LevelManager() = default;
     ~LevelManager() = default;
 
-    std::vector<Level> levels;
+    Level current_level;
+    char *current_level_data = nullptr;
 
 };
 

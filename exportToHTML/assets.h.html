@@ -1,0 +1,179 @@
+<html>
+<head>
+<title>assets.h</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #b3ae60;}
+.s1 { color: #bcbec4;}
+.s2 { color: #6aab73;}
+.s3 { color: #cf8e6d;}
+.s4 { color: #bcbec4;}
+.s5 { color: #2aacb8;}
+.s6 { color: #7a7e85;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+assets.h</font>
+</center></td></tr></table>
+<pre><span class="s0">#ifndef </span><span class="s1">IMAGES_H</span>
+<span class="s0">#define </span><span class="s1">IMAGES_H</span>
+
+<span class="s0">#include </span><span class="s2">&quot;raylib.h&quot;</span>
+<span class="s0">#include </span><span class="s2">&quot;globals.h&quot;</span>
+
+<span class="s0">#include </span><span class="s2">&lt;string&gt;</span>
+<span class="s0">#include </span><span class="s2">&lt;cassert&gt;</span>
+
+<span class="s3">void </span><span class="s1">load_fonts</span><span class="s4">() {</span>
+    <span class="s1">menu_font </span><span class="s4">= </span><span class="s1">LoadFontEx</span><span class="s4">(</span><span class="s2">&quot;data/fonts/ARCADE_N.ttf&quot;</span><span class="s4">, </span><span class="s5">256</span><span class="s4">, </span><span class="s3">nullptr</span><span class="s4">, </span><span class="s5">128</span><span class="s4">);</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">unload_fonts</span><span class="s4">() {</span>
+    <span class="s1">UnloadFont</span><span class="s4">(</span><span class="s1">menu_font</span><span class="s4">);</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">load_images</span><span class="s4">() {</span>
+    <span class="s1">wall_image                   </span><span class="s4">= </span><span class="s1">LoadTexture</span><span class="s4">(</span><span class="s2">&quot;data/images/wall.png&quot;</span><span class="s4">);</span>
+    <span class="s1">wall_dark_image              </span><span class="s4">= </span><span class="s1">LoadTexture</span><span class="s4">(</span><span class="s2">&quot;data/images/wall_dark.png&quot;</span><span class="s4">);</span>
+    <span class="s1">spike_image                  </span><span class="s4">= </span><span class="s1">LoadTexture</span><span class="s4">(</span><span class="s2">&quot;data/images/spikes.png&quot;</span><span class="s4">);</span>
+    <span class="s1">exit_image                   </span><span class="s4">= </span><span class="s1">LoadTexture</span><span class="s4">(</span><span class="s2">&quot;data/images/exit.png&quot;</span><span class="s4">);</span>
+
+    <span class="s1">coin_sprite                  </span><span class="s4">= </span><span class="s1">load_sprite</span><span class="s4">(</span><span class="s2">&quot;data/images/coin/coin&quot;</span><span class="s4">, </span><span class="s2">&quot;.png&quot;</span><span class="s4">, </span><span class="s5">3</span><span class="s4">, </span><span class="s3">true</span><span class="s4">, </span><span class="s5">18</span><span class="s4">);</span>
+    <span class="s1">heart_image                  </span><span class="s4">= </span><span class="s1">LoadTexture</span><span class="s4">(</span><span class="s2">&quot;data/images/heart.png&quot;</span><span class="s4">);</span>
+
+    <span class="s1">player_stand_forward_image   </span><span class="s4">= </span><span class="s1">LoadTexture</span><span class="s4">(</span><span class="s2">&quot;data/images/player_stand_forward.png&quot;</span><span class="s4">);</span>
+    <span class="s1">player_stand_backwards_image </span><span class="s4">= </span><span class="s1">LoadTexture</span><span class="s4">(</span><span class="s2">&quot;data/images/player_stand_backwards.png&quot;</span><span class="s4">);</span>
+    <span class="s1">player_jump_forward_image    </span><span class="s4">= </span><span class="s1">LoadTexture</span><span class="s4">(</span><span class="s2">&quot;data/images/player_jump_forward.png&quot;</span><span class="s4">);</span>
+    <span class="s1">player_jump_backwards_image  </span><span class="s4">= </span><span class="s1">LoadTexture</span><span class="s4">(</span><span class="s2">&quot;data/images/player_jump_backwards.png&quot;</span><span class="s4">);</span>
+    <span class="s1">player_dead_image            </span><span class="s4">= </span><span class="s1">LoadTexture</span><span class="s4">(</span><span class="s2">&quot;data/images/player_dead.png&quot;</span><span class="s4">);</span>
+    <span class="s1">player_walk_forward_sprite   </span><span class="s4">= </span><span class="s1">load_sprite</span><span class="s4">(</span><span class="s2">&quot;data/images/player_walk_forward/player&quot;</span><span class="s4">, </span><span class="s2">&quot;.png&quot;</span><span class="s4">, </span><span class="s5">3</span><span class="s4">, </span><span class="s3">true</span><span class="s4">, </span><span class="s5">15</span><span class="s4">);</span>
+    <span class="s1">player_walk_backwards_sprite </span><span class="s4">= </span><span class="s1">load_sprite</span><span class="s4">(</span><span class="s2">&quot;data/images/player_walk_backwards/player&quot;</span><span class="s4">, </span><span class="s2">&quot;.png&quot;</span><span class="s4">, </span><span class="s5">3</span><span class="s4">, </span><span class="s3">true</span><span class="s4">, </span><span class="s5">15</span><span class="s4">);</span>
+
+    <span class="s1">enemy_walk                   </span><span class="s4">= </span><span class="s1">load_sprite</span><span class="s4">(</span><span class="s2">&quot;data/images/enemy_walk/enemy&quot;</span><span class="s4">, </span><span class="s2">&quot;.png&quot;</span><span class="s4">, </span><span class="s5">2</span><span class="s4">, </span><span class="s3">true</span><span class="s4">, </span><span class="s5">15</span><span class="s4">);</span>
+
+    <span class="s1">background                   </span><span class="s4">= </span><span class="s1">LoadTexture</span><span class="s4">(</span><span class="s2">&quot;data/images/background/background.png&quot;</span><span class="s4">);</span>
+    <span class="s1">middleground                 </span><span class="s4">= </span><span class="s1">LoadTexture</span><span class="s4">(</span><span class="s2">&quot;data/images/background/middleground.png&quot;</span><span class="s4">);</span>
+    <span class="s1">foreground                   </span><span class="s4">= </span><span class="s1">LoadTexture</span><span class="s4">(</span><span class="s2">&quot;data/images/background/foreground.png&quot;</span><span class="s4">);</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">unload_images</span><span class="s4">() {</span>
+    <span class="s1">UnloadTexture</span><span class="s4">(</span><span class="s1">wall_image</span><span class="s4">);</span>
+    <span class="s1">UnloadTexture</span><span class="s4">(</span><span class="s1">wall_dark_image</span><span class="s4">);</span>
+    <span class="s1">UnloadTexture</span><span class="s4">(</span><span class="s1">spike_image</span><span class="s4">);</span>
+    <span class="s1">UnloadTexture</span><span class="s4">(</span><span class="s1">exit_image</span><span class="s4">);</span>
+
+    <span class="s1">unload_sprite</span><span class="s4">(</span><span class="s1">coin_sprite</span><span class="s4">);</span>
+    <span class="s1">UnloadTexture</span><span class="s4">(</span><span class="s1">heart_image</span><span class="s4">);</span>
+
+    <span class="s1">UnloadTexture</span><span class="s4">(</span><span class="s1">player_stand_forward_image</span><span class="s4">);</span>
+    <span class="s1">UnloadTexture</span><span class="s4">(</span><span class="s1">player_stand_backwards_image</span><span class="s4">);</span>
+    <span class="s1">UnloadTexture</span><span class="s4">(</span><span class="s1">player_jump_forward_image</span><span class="s4">);</span>
+    <span class="s1">UnloadTexture</span><span class="s4">(</span><span class="s1">player_jump_backwards_image</span><span class="s4">);</span>
+    <span class="s1">UnloadTexture</span><span class="s4">(</span><span class="s1">player_dead_image</span><span class="s4">);</span>
+    <span class="s1">unload_sprite</span><span class="s4">(</span><span class="s1">player_walk_forward_sprite</span><span class="s4">);</span>
+    <span class="s1">unload_sprite</span><span class="s4">(</span><span class="s1">player_walk_backwards_sprite</span><span class="s4">);</span>
+
+    <span class="s1">unload_sprite</span><span class="s4">(</span><span class="s1">enemy_walk</span><span class="s4">);</span>
+
+    <span class="s1">UnloadTexture</span><span class="s4">(</span><span class="s1">background</span><span class="s4">);</span>
+    <span class="s1">UnloadTexture</span><span class="s4">(</span><span class="s1">middleground</span><span class="s4">);</span>
+    <span class="s1">UnloadTexture</span><span class="s4">(</span><span class="s1">foreground</span><span class="s4">);</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">draw_image</span><span class="s4">(</span><span class="s1">Texture2D image</span><span class="s4">, </span><span class="s1">Vector2 pos</span><span class="s4">, </span><span class="s3">float </span><span class="s1">size</span><span class="s4">) {</span>
+    <span class="s1">draw_image</span><span class="s4">(</span><span class="s1">image</span><span class="s4">, </span><span class="s1">pos</span><span class="s4">, </span><span class="s1">size</span><span class="s4">, </span><span class="s1">size</span><span class="s4">);</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">draw_image</span><span class="s4">(</span><span class="s1">Texture2D image</span><span class="s4">, </span><span class="s1">Vector2 pos</span><span class="s4">, </span><span class="s3">float </span><span class="s1">width</span><span class="s4">, </span><span class="s3">float </span><span class="s1">height</span><span class="s4">) {</span>
+    <span class="s1">Rectangle source </span><span class="s4">= { </span><span class="s5">0.0f</span><span class="s4">, </span><span class="s5">0.0f</span><span class="s4">, </span><span class="s3">static_cast</span><span class="s4">&lt;</span><span class="s3">float</span><span class="s4">&gt;(</span><span class="s1">image</span><span class="s4">.</span><span class="s1">width</span><span class="s4">), </span><span class="s3">static_cast</span><span class="s4">&lt;</span><span class="s3">float</span><span class="s4">&gt;(</span><span class="s1">image</span><span class="s4">.</span><span class="s1">height</span><span class="s4">) };</span>
+    <span class="s1">Rectangle destination </span><span class="s4">= { </span><span class="s1">pos</span><span class="s4">.</span><span class="s1">x</span><span class="s4">, </span><span class="s1">pos</span><span class="s4">.</span><span class="s1">y</span><span class="s4">, </span><span class="s1">width</span><span class="s4">, </span><span class="s1">height </span><span class="s4">};</span>
+    <span class="s1">DrawTexturePro</span><span class="s4">(</span><span class="s1">image</span><span class="s4">, </span><span class="s1">source</span><span class="s4">, </span><span class="s1">destination</span><span class="s4">, { </span><span class="s5">0.0f</span><span class="s4">, </span><span class="s5">0.0f </span><span class="s4">}, </span><span class="s5">0.0f</span><span class="s4">, </span><span class="s1">WHITE</span><span class="s4">);</span>
+<span class="s4">}</span>
+
+<span class="s1">sprite load_sprite</span><span class="s4">(</span>
+    <span class="s3">const </span><span class="s1">std::string </span><span class="s4">&amp;</span><span class="s1">file_name_prefix</span><span class="s4">,</span>
+    <span class="s3">const </span><span class="s1">std::string </span><span class="s4">&amp;</span><span class="s1">file_name_suffix</span><span class="s4">,</span>
+    <span class="s1">size_t frame_count</span><span class="s4">,</span>
+    <span class="s3">bool </span><span class="s1">loop</span><span class="s4">,</span>
+    <span class="s1">size_t frames_to_skip</span>
+<span class="s4">) {</span>
+    <span class="s1">assert</span><span class="s4">(</span><span class="s1">frame_count </span><span class="s4">&lt; </span><span class="s5">100</span><span class="s4">);</span>
+
+    <span class="s1">sprite result </span><span class="s4">= {</span>
+        <span class="s1">frame_count</span><span class="s4">, </span><span class="s1">frames_to_skip</span><span class="s4">, </span><span class="s5">0</span><span class="s4">, </span><span class="s5">0</span><span class="s4">, </span><span class="s1">loop</span><span class="s4">, </span><span class="s5">0</span><span class="s4">, </span><span class="s3">new </span><span class="s1">Texture2D</span><span class="s4">[</span><span class="s1">frame_count</span><span class="s4">]</span>
+    <span class="s4">};</span>
+
+    <span class="s3">for </span><span class="s4">(</span><span class="s1">size_t i </span><span class="s4">= </span><span class="s5">0</span><span class="s4">; </span><span class="s1">i </span><span class="s4">&lt; </span><span class="s1">frame_count</span><span class="s4">; ++</span><span class="s1">i</span><span class="s4">) {</span>
+        <span class="s1">std::string file_name</span><span class="s4">;</span>
+        <span class="s3">if </span><span class="s4">(</span><span class="s1">frame_count </span><span class="s4">&lt; </span><span class="s5">10</span><span class="s4">) {</span>
+            <span class="s1">file_name </span><span class="s4">= </span><span class="s1">file_name_prefix</span><span class="s4">;</span>
+            <span class="s1">file_name </span><span class="s4">+= </span><span class="s1">std::to_string</span><span class="s4">(</span><span class="s1">i</span><span class="s4">);</span>
+            <span class="s1">file_name </span><span class="s4">+= </span><span class="s1">file_name_suffix</span><span class="s4">;</span>
+        <span class="s4">} </span><span class="s3">else </span><span class="s4">{</span>
+            <span class="s1">file_name </span><span class="s4">= </span><span class="s1">file_name_prefix</span><span class="s4">;</span>
+            <span class="s1">file_name </span><span class="s4">+= </span><span class="s1">i </span><span class="s4">&lt; </span><span class="s5">10 </span><span class="s1">? </span><span class="s4">(</span><span class="s2">&quot;0&quot; </span><span class="s4">+ </span><span class="s1">std::to_string</span><span class="s4">(</span><span class="s1">i</span><span class="s4">)) </span><span class="s1">: std::to_string</span><span class="s4">(</span><span class="s1">i</span><span class="s4">);</span>
+            <span class="s1">file_name </span><span class="s4">+= </span><span class="s1">file_name_suffix</span><span class="s4">;</span>
+        <span class="s4">}</span>
+        <span class="s1">result</span><span class="s4">.</span><span class="s1">frames</span><span class="s4">[</span><span class="s1">i</span><span class="s4">] = </span><span class="s1">LoadTexture</span><span class="s4">(</span><span class="s1">file_name</span><span class="s4">.</span><span class="s1">c_str</span><span class="s4">());</span>
+    <span class="s4">}</span>
+
+    <span class="s3">return </span><span class="s1">result</span><span class="s4">;</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">unload_sprite</span><span class="s4">(</span><span class="s1">sprite </span><span class="s4">&amp;</span><span class="s1">sprite</span><span class="s4">) {</span>
+    <span class="s1">assert</span><span class="s4">(</span><span class="s1">sprite</span><span class="s4">.</span><span class="s1">frames </span><span class="s4">!= </span><span class="s3">nullptr</span><span class="s4">);</span>
+
+    <span class="s3">for </span><span class="s4">(</span><span class="s1">size_t i </span><span class="s4">= </span><span class="s5">0</span><span class="s4">; </span><span class="s1">i </span><span class="s4">&lt; </span><span class="s1">sprite</span><span class="s4">.</span><span class="s1">frame_count</span><span class="s4">; ++</span><span class="s1">i</span><span class="s4">) {</span>
+        <span class="s1">UnloadTexture</span><span class="s4">(</span><span class="s1">sprite</span><span class="s4">.</span><span class="s1">frames</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]);</span>
+    <span class="s4">}</span>
+    <span class="s3">delete</span><span class="s4">[] </span><span class="s1">sprite</span><span class="s4">.</span><span class="s1">frames</span><span class="s4">;</span>
+    <span class="s1">sprite</span><span class="s4">.</span><span class="s1">frames </span><span class="s4">= </span><span class="s3">nullptr</span><span class="s4">;</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">draw_sprite</span><span class="s4">(</span><span class="s1">sprite </span><span class="s4">&amp;</span><span class="s1">sprite</span><span class="s4">, </span><span class="s1">Vector2 pos</span><span class="s4">, </span><span class="s3">float </span><span class="s1">size</span><span class="s4">) {</span>
+    <span class="s1">draw_sprite</span><span class="s4">(</span><span class="s1">sprite</span><span class="s4">, </span><span class="s1">pos</span><span class="s4">, </span><span class="s1">size</span><span class="s4">, </span><span class="s1">size</span><span class="s4">);</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">draw_sprite</span><span class="s4">(</span><span class="s1">sprite </span><span class="s4">&amp;</span><span class="s1">sprite</span><span class="s4">, </span><span class="s1">Vector2 pos</span><span class="s4">, </span><span class="s3">float </span><span class="s1">width</span><span class="s4">, </span><span class="s3">float </span><span class="s1">height</span><span class="s4">) {</span>
+    <span class="s1">draw_image</span><span class="s4">(</span><span class="s1">sprite</span><span class="s4">.</span><span class="s1">frames</span><span class="s4">[</span><span class="s1">sprite</span><span class="s4">.</span><span class="s1">frame_index</span><span class="s4">], </span><span class="s1">pos</span><span class="s4">, </span><span class="s1">width</span><span class="s4">, </span><span class="s1">height</span><span class="s4">);</span>
+
+    <span class="s3">if </span><span class="s4">(</span><span class="s1">sprite</span><span class="s4">.</span><span class="s1">prev_game_frame </span><span class="s4">== </span><span class="s1">game_frame</span><span class="s4">) {</span>
+        <span class="s3">return</span><span class="s4">;</span>
+    <span class="s4">}</span>
+    <span class="s3">if </span><span class="s4">(</span><span class="s1">sprite</span><span class="s4">.</span><span class="s1">frames_skipped </span><span class="s4">&lt; </span><span class="s1">sprite</span><span class="s4">.</span><span class="s1">frames_to_skip</span><span class="s4">) {</span>
+        <span class="s4">++</span><span class="s1">sprite</span><span class="s4">.</span><span class="s1">frames_skipped</span><span class="s4">;</span>
+    <span class="s4">} </span><span class="s3">else </span><span class="s4">{</span>
+        <span class="s1">sprite</span><span class="s4">.</span><span class="s1">frames_skipped </span><span class="s4">= </span><span class="s5">0</span><span class="s4">;</span>
+
+        <span class="s4">++</span><span class="s1">sprite</span><span class="s4">.</span><span class="s1">frame_index</span><span class="s4">;</span>
+        <span class="s3">if </span><span class="s4">(</span><span class="s1">sprite</span><span class="s4">.</span><span class="s1">frame_index </span><span class="s4">&gt;= </span><span class="s1">sprite</span><span class="s4">.</span><span class="s1">frame_count</span><span class="s4">) {</span>
+            <span class="s1">sprite</span><span class="s4">.</span><span class="s1">frame_index </span><span class="s4">= </span><span class="s1">sprite</span><span class="s4">.</span><span class="s1">loop ? </span><span class="s5">0 </span><span class="s1">: sprite</span><span class="s4">.</span><span class="s1">frame_count </span><span class="s4">- </span><span class="s5">1</span><span class="s4">;</span>
+        <span class="s4">}</span>
+    <span class="s4">}</span>
+    <span class="s1">sprite</span><span class="s4">.</span><span class="s1">prev_game_frame </span><span class="s4">= </span><span class="s1">game_frame</span><span class="s4">;</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">load_sounds</span><span class="s4">() {</span>
+    <span class="s1">InitAudioDevice</span><span class="s4">();</span>
+    <span class="s1">coin_sound         </span><span class="s4">= </span><span class="s1">LoadSound</span><span class="s4">(</span><span class="s2">&quot;data/sounds/coin.wav&quot;</span><span class="s4">);</span>
+    <span class="s1">exit_sound         </span><span class="s4">= </span><span class="s1">LoadSound</span><span class="s4">(</span><span class="s2">&quot;data/sounds/exit.wav&quot;</span><span class="s4">);</span>
+    <span class="s1">kill_enemy_sound   </span><span class="s4">= </span><span class="s1">LoadSound</span><span class="s4">(</span><span class="s2">&quot;data/sounds/kill_enemy.wav&quot;</span><span class="s4">);</span>
+    <span class="s1">player_death_sound </span><span class="s4">= </span><span class="s1">LoadSound</span><span class="s4">(</span><span class="s2">&quot;data/sounds/player_death.wav&quot;</span><span class="s4">);</span>
+    <span class="s1">game_over_sound    </span><span class="s4">= </span><span class="s1">LoadSound</span><span class="s4">(</span><span class="s2">&quot;data/sounds/game_over.wav&quot;</span><span class="s4">);</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">unload_sounds</span><span class="s4">() {</span>
+    <span class="s1">UnloadSound</span><span class="s4">(</span><span class="s1">coin_sound</span><span class="s4">);</span>
+    <span class="s1">UnloadSound</span><span class="s4">(</span><span class="s1">exit_sound</span><span class="s4">);</span>
+    <span class="s1">UnloadSound</span><span class="s4">(</span><span class="s1">kill_enemy_sound</span><span class="s4">);</span>
+    <span class="s1">UnloadSound</span><span class="s4">(</span><span class="s1">player_death_sound</span><span class="s4">);</span>
+    <span class="s1">UnloadSound</span><span class="s4">(</span><span class="s1">game_over_sound</span><span class="s4">);</span>
+<span class="s4">}</span>
+
+<span class="s0">#endif </span><span class="s6">// IMAGES_H</span>
+</pre>
+</body>
+</html>

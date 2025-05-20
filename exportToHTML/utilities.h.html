@@ -1,0 +1,37 @@
+<html>
+<head>
+<title>utilities.h</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #b3ae60;}
+.s1 { color: #bcbec4;}
+.s2 { color: #6aab73;}
+.s3 { color: #cf8e6d;}
+.s4 { color: #bcbec4;}
+.s5 { color: #7a7e85;}
+.s6 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+utilities.h</font>
+</center></td></tr></table>
+<pre><span class="s0">#ifndef </span><span class="s1">UTILITIES_H</span>
+<span class="s0">#define </span><span class="s1">UTILITIES_H</span>
+
+<span class="s0">#include </span><span class="s2">&lt;cstdlib&gt;</span>
+
+<span class="s3">float </span><span class="s1">rand_from_to</span><span class="s4">(</span><span class="s3">float </span><span class="s1">from</span><span class="s4">, </span><span class="s3">float </span><span class="s1">to</span><span class="s4">) {</span>
+    <span class="s3">return </span><span class="s1">from </span><span class="s4">+ </span><span class="s3">static_cast</span><span class="s4">&lt;</span><span class="s3">float</span><span class="s4">&gt;(</span><span class="s1">std::rand</span><span class="s4">()) / </span><span class="s3">static_cast</span><span class="s4">&lt;</span><span class="s3">float</span><span class="s4">&gt;(</span><span class="s1">RAND_MAX</span><span class="s4">) * (</span><span class="s1">to </span><span class="s4">- </span><span class="s1">from</span><span class="s4">); </span><span class="s5">// NOLINT(*-msc50-cpp)</span>
+<span class="s4">}</span>
+
+<span class="s3">float </span><span class="s1">rand_up_to</span><span class="s4">(</span><span class="s3">float </span><span class="s1">to</span><span class="s4">) {</span>
+    <span class="s3">return </span><span class="s1">rand_from_to</span><span class="s4">(</span><span class="s6">0.0f</span><span class="s4">, </span><span class="s1">to</span><span class="s4">);</span>
+<span class="s4">}</span>
+
+<span class="s0">#endif </span><span class="s5">// UTILITIES_H</span>
+</pre>
+</body>
+</html>

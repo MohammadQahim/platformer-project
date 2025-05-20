@@ -2,13 +2,12 @@
 #include "globals.h"
 #include "level.h"
 
-
 void EnemiesController::spawn_enemies() {
     // Create enemies, incrementing their amount every time a new one is created
     enemies.clear();
 
-    for (size_t row = 0; row < current_level.get_rows(); ++row) {
-        for (size_t column = 0; column < current_level.get_columns(); ++column) {
+    for (size_t row = 0; row < LevelManager::get_instance().get_current_level().get_rows(); ++row) {
+        for (size_t column = 0; column < LevelManager::get_instance().get_current_level().get_columns(); ++column) {
             if (const char cell = LevelManager::get_instance().get_level_cell(row, column); cell == ENEMY) {
                 // Instantiate and add an enemy to the level
                 enemies.push_back({

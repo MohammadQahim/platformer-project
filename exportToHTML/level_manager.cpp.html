@@ -1,0 +1,127 @@
+<html>
+<head>
+<title>level_manager.cpp</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #b3ae60;}
+.s1 { color: #bcbec4;}
+.s2 { color: #6aab73;}
+.s3 { color: #cf8e6d;}
+.s4 { color: #bcbec4;}
+.s5 { color: #2aacb8;}
+.s6 { color: #7a7e85;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+level_manager.cpp</font>
+</center></td></tr></table>
+<pre><span class="s0">#include </span><span class="s2">&quot;level_manager.h&quot;</span>
+<span class="s0">#include </span><span class="s2">&quot;level.h&quot;</span>
+<span class="s0">#include </span><span class="s2">&quot;globals.h&quot;</span>
+<span class="s0">#include </span><span class="s2">&quot;player_controller.h&quot;</span>
+
+<span class="s3">bool </span><span class="s1">LevelManager::is_inside_level</span><span class="s4">(</span><span class="s3">int </span><span class="s1">row</span><span class="s4">, </span><span class="s3">int </span><span class="s1">column</span><span class="s4">) {</span>
+    <span class="s3">if </span><span class="s4">(</span><span class="s1">row </span><span class="s4">&lt; </span><span class="s5">0 </span><span class="s4">|| </span><span class="s1">row </span><span class="s4">&gt;= </span><span class="s1">current_level</span><span class="s4">.</span><span class="s1">get_rows</span><span class="s4">()) </span><span class="s3">return false</span><span class="s4">;</span>
+    <span class="s3">if </span><span class="s4">(</span><span class="s1">column </span><span class="s4">&lt; </span><span class="s5">0 </span><span class="s4">|| </span><span class="s1">column </span><span class="s4">&gt;= </span><span class="s1">current_level</span><span class="s4">.</span><span class="s1">get_columns</span><span class="s4">()) </span><span class="s3">return false</span><span class="s4">;</span>
+    <span class="s3">return true</span><span class="s4">;</span>
+<span class="s4">}</span>
+
+<span class="s3">bool </span><span class="s1">LevelManager::is_colliding</span><span class="s4">(</span><span class="s1">Vector2 pos</span><span class="s4">, </span><span class="s3">char </span><span class="s1">look_for</span><span class="s4">) {</span>
+    <span class="s1">Rectangle entity_hitbox </span><span class="s4">= {</span><span class="s1">pos</span><span class="s4">.</span><span class="s1">x</span><span class="s4">, </span><span class="s1">pos</span><span class="s4">.</span><span class="s1">y</span><span class="s4">, </span><span class="s5">1.0f</span><span class="s4">, </span><span class="s5">1.0f</span><span class="s4">};</span>
+
+    <span class="s6">// Scan the adjacent area in the level to look for a match in collision</span>
+    <span class="s3">for </span><span class="s4">(</span><span class="s3">int </span><span class="s1">row </span><span class="s4">= </span><span class="s1">pos</span><span class="s4">.</span><span class="s1">y </span><span class="s4">- </span><span class="s5">1</span><span class="s4">; </span><span class="s1">row </span><span class="s4">&lt; </span><span class="s1">pos</span><span class="s4">.</span><span class="s1">y </span><span class="s4">+ </span><span class="s5">1</span><span class="s4">; ++</span><span class="s1">row</span><span class="s4">) {</span>
+        <span class="s3">for </span><span class="s4">(</span><span class="s3">int </span><span class="s1">column </span><span class="s4">= </span><span class="s1">pos</span><span class="s4">.</span><span class="s1">x </span><span class="s4">- </span><span class="s5">1</span><span class="s4">; </span><span class="s1">column </span><span class="s4">&lt; </span><span class="s1">pos</span><span class="s4">.</span><span class="s1">x </span><span class="s4">+ </span><span class="s5">1</span><span class="s4">; ++</span><span class="s1">column</span><span class="s4">) {</span>
+            <span class="s6">// Check if the cell is out-of-bounds</span>
+            <span class="s3">if </span><span class="s4">(!</span><span class="s1">is_inside_level</span><span class="s4">(</span><span class="s1">row</span><span class="s4">, </span><span class="s1">column</span><span class="s4">)) </span><span class="s3">continue</span><span class="s4">;</span>
+            <span class="s3">if </span><span class="s4">(</span><span class="s1">get_level_cell</span><span class="s4">(</span><span class="s1">row</span><span class="s4">, </span><span class="s1">column</span><span class="s4">) == </span><span class="s1">look_for</span><span class="s4">) {</span>
+                <span class="s1">Rectangle block_hitbox </span><span class="s4">= {(</span><span class="s3">float</span><span class="s4">) </span><span class="s1">column</span><span class="s4">, (</span><span class="s3">float</span><span class="s4">) </span><span class="s1">row</span><span class="s4">, </span><span class="s5">1.0f</span><span class="s4">, </span><span class="s5">1.0f</span><span class="s4">};</span>
+                <span class="s3">if </span><span class="s4">(</span><span class="s1">CheckCollisionRecs</span><span class="s4">(</span><span class="s1">entity_hitbox</span><span class="s4">, </span><span class="s1">block_hitbox</span><span class="s4">)) {</span>
+                    <span class="s3">return true</span><span class="s4">;</span>
+                <span class="s4">}</span>
+            <span class="s4">}</span>
+        <span class="s4">}</span>
+    <span class="s4">}</span>
+    <span class="s3">return false</span><span class="s4">;</span>
+<span class="s4">}</span>
+
+<span class="s3">char</span><span class="s4">&amp; </span><span class="s1">LevelManager::get_collider</span><span class="s4">(</span><span class="s1">Vector2 pos</span><span class="s4">, </span><span class="s3">char </span><span class="s1">look_for</span><span class="s4">) {</span>
+    <span class="s6">// Like is_colliding(), except returns a reference to the colliding object</span>
+    <span class="s1">Rectangle player_hitbox </span><span class="s4">= {</span><span class="s1">pos</span><span class="s4">.</span><span class="s1">x</span><span class="s4">, </span><span class="s1">pos</span><span class="s4">.</span><span class="s1">y</span><span class="s4">, </span><span class="s5">1.0f</span><span class="s4">, </span><span class="s5">1.0f</span><span class="s4">};</span>
+
+    <span class="s3">for </span><span class="s4">(</span><span class="s3">int </span><span class="s1">row </span><span class="s4">= </span><span class="s1">pos</span><span class="s4">.</span><span class="s1">y </span><span class="s4">- </span><span class="s5">1</span><span class="s4">; </span><span class="s1">row </span><span class="s4">&lt; </span><span class="s1">pos</span><span class="s4">.</span><span class="s1">y </span><span class="s4">+ </span><span class="s5">1</span><span class="s4">; ++</span><span class="s1">row</span><span class="s4">) {</span>
+        <span class="s3">for </span><span class="s4">(</span><span class="s3">int </span><span class="s1">column </span><span class="s4">= </span><span class="s1">pos</span><span class="s4">.</span><span class="s1">x </span><span class="s4">- </span><span class="s5">1</span><span class="s4">; </span><span class="s1">column </span><span class="s4">&lt; </span><span class="s1">pos</span><span class="s4">.</span><span class="s1">x </span><span class="s4">+ </span><span class="s5">1</span><span class="s4">; ++</span><span class="s1">column</span><span class="s4">) {</span>
+            <span class="s6">// Check if the cell is out-of-bounds</span>
+            <span class="s3">if </span><span class="s4">(!</span><span class="s1">is_inside_level</span><span class="s4">(</span><span class="s1">row</span><span class="s4">, </span><span class="s1">column</span><span class="s4">)) </span><span class="s3">continue</span><span class="s4">;</span>
+            <span class="s3">if </span><span class="s4">(</span><span class="s1">get_level_cell</span><span class="s4">(</span><span class="s1">row</span><span class="s4">, </span><span class="s1">column</span><span class="s4">) == </span><span class="s1">look_for</span><span class="s4">) {</span>
+                <span class="s1">Rectangle block_hitbox </span><span class="s4">= {(</span><span class="s3">float</span><span class="s4">) </span><span class="s1">column</span><span class="s4">, (</span><span class="s3">float</span><span class="s4">) </span><span class="s1">row</span><span class="s4">, </span><span class="s5">1.0f</span><span class="s4">, </span><span class="s5">1.0f</span><span class="s4">};</span>
+                <span class="s3">if </span><span class="s4">(</span><span class="s1">CheckCollisionRecs</span><span class="s4">(</span><span class="s1">player_hitbox</span><span class="s4">, </span><span class="s1">block_hitbox</span><span class="s4">)) {</span>
+                    <span class="s3">return </span><span class="s1">get_level_cell</span><span class="s4">(</span><span class="s1">row</span><span class="s4">, </span><span class="s1">column</span><span class="s4">);</span>
+                <span class="s4">}</span>
+            <span class="s4">}</span>
+        <span class="s4">}</span>
+    <span class="s4">}</span>
+
+    <span class="s6">// If failed, get an approximation</span>
+    <span class="s3">return </span><span class="s1">get_level_cell</span><span class="s4">(</span><span class="s1">pos</span><span class="s4">.</span><span class="s1">x</span><span class="s4">, </span><span class="s1">pos</span><span class="s4">.</span><span class="s1">y</span><span class="s4">);;</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">LevelManager::reset_level_index</span><span class="s4">() {</span>
+    <span class="s1">level_index </span><span class="s4">= </span><span class="s5">0</span><span class="s4">;</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">LevelManager::load_level</span><span class="s4">(</span><span class="s3">int </span><span class="s1">offset</span><span class="s4">) {</span>
+    <span class="s1">level_index </span><span class="s4">+= </span><span class="s1">offset</span><span class="s4">;</span>
+
+    <span class="s6">// Win logic</span>
+    <span class="s3">if </span><span class="s4">(</span><span class="s1">level_index </span><span class="s4">&gt;= </span><span class="s1">LEVEL_COUNT</span><span class="s4">) {</span>
+        <span class="s1">game_state </span><span class="s4">= </span><span class="s1">VICTORY_STATE</span><span class="s4">;</span>
+        <span class="s1">create_victory_menu_background</span><span class="s4">();</span>
+        <span class="s1">level_index </span><span class="s4">= </span><span class="s5">0</span><span class="s4">;</span>
+        <span class="s3">return</span><span class="s4">;</span>
+    <span class="s4">}</span>
+
+    <span class="s6">// Level duplication</span>
+    <span class="s1">size_t rows </span><span class="s4">= </span><span class="s1">LEVELS</span><span class="s4">[</span><span class="s1">level_index</span><span class="s4">].</span><span class="s1">get_rows</span><span class="s4">();</span>
+    <span class="s1">size_t columns </span><span class="s4">= </span><span class="s1">LEVELS</span><span class="s4">[</span><span class="s1">level_index</span><span class="s4">].</span><span class="s1">get_columns</span><span class="s4">();</span>
+    <span class="s1">current_level_data </span><span class="s4">= </span><span class="s3">new char</span><span class="s4">[</span><span class="s1">rows</span><span class="s4">*</span><span class="s1">columns</span><span class="s4">];</span>
+
+    <span class="s3">for </span><span class="s4">(</span><span class="s3">int </span><span class="s1">row </span><span class="s4">= </span><span class="s5">0</span><span class="s4">; </span><span class="s1">row </span><span class="s4">&lt; </span><span class="s1">rows</span><span class="s4">; </span><span class="s1">row</span><span class="s4">++) {</span>
+        <span class="s3">for </span><span class="s4">(</span><span class="s3">int </span><span class="s1">column </span><span class="s4">= </span><span class="s5">0</span><span class="s4">; </span><span class="s1">column </span><span class="s4">&lt; </span><span class="s1">columns</span><span class="s4">; </span><span class="s1">column</span><span class="s4">++) {</span>
+            <span class="s1">current_level_data</span><span class="s4">[</span><span class="s1">row </span><span class="s4">* </span><span class="s1">columns </span><span class="s4">+ </span><span class="s1">column</span><span class="s4">] = </span><span class="s1">LEVELS</span><span class="s4">[</span><span class="s1">level_index</span><span class="s4">].</span><span class="s1">get_data</span><span class="s4">()[</span><span class="s1">row </span><span class="s4">* </span><span class="s1">columns </span><span class="s4">+ </span><span class="s1">column</span><span class="s4">];</span>
+        <span class="s4">}</span>
+    <span class="s4">}</span>
+
+    <span class="s1">current_level </span><span class="s4">= {</span><span class="s1">rows</span><span class="s4">, </span><span class="s1">columns</span><span class="s4">, </span><span class="s1">current_level_data</span><span class="s4">};</span>
+
+    <span class="s6">// Instantiate entities</span>
+    <span class="s1">PlayerController::get_instance</span><span class="s4">().</span><span class="s1">spawn_player</span><span class="s4">();</span>
+    <span class="s1">EnemiesController::get_instance</span><span class="s4">().</span><span class="s1">spawn_enemies</span><span class="s4">();</span>
+
+    <span class="s6">// Calculate positioning and sizes</span>
+    <span class="s1">derive_graphics_metrics_from_loaded_level</span><span class="s4">();</span>
+
+    <span class="s6">// Reset the timer</span>
+    <span class="s1">timer </span><span class="s4">= </span><span class="s1">MAX_LEVEL_TIME</span><span class="s4">;</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">LevelManager::unload_level</span><span class="s4">() {</span>
+    <span class="s3">delete</span><span class="s4">[] </span><span class="s1">current_level_data</span><span class="s4">;</span>
+<span class="s4">}</span>
+
+<span class="s6">// Getters and setters</span>
+<span class="s3">char</span><span class="s4">&amp; </span><span class="s1">LevelManager::get_level_cell</span><span class="s4">(</span><span class="s1">size_t row</span><span class="s4">, </span><span class="s1">size_t column</span><span class="s4">) {</span>
+    <span class="s3">return </span><span class="s1">current_level</span><span class="s4">.</span><span class="s1">get_data</span><span class="s4">()[</span><span class="s1">row </span><span class="s4">* </span><span class="s1">current_level</span><span class="s4">.</span><span class="s1">get_columns</span><span class="s4">() + </span><span class="s1">column</span><span class="s4">];</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">LevelManager::set_level_cell</span><span class="s4">(</span><span class="s1">size_t row</span><span class="s4">, </span><span class="s1">size_t column</span><span class="s4">, </span><span class="s3">char </span><span class="s1">chr</span><span class="s4">) {</span>
+    <span class="s1">get_level_cell</span><span class="s4">(</span><span class="s1">row</span><span class="s4">, </span><span class="s1">column</span><span class="s4">) = </span><span class="s1">chr</span><span class="s4">;</span>
+<span class="s4">}</span>
+
+
+</pre>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<html>
+<head>
+<title>CMakeLists.txt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #ffc66d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #cf8e6d;}
+.s4 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+CMakeLists.txt</font>
+</center></td></tr></table>
+<pre><span class="s0">cmake_minimum_required</span><span class="s1">(VERSION 3.27)</span>
+<span class="s0">project</span><span class="s1">(platformer)</span>
+
+<span class="s0">set</span><span class="s1">(CMAKE_CXX_STANDARD 17)</span>
+
+<span class="s0">find_package</span><span class="s1">(raylib CONFIG REQUIRED)</span>
+<span class="s3">if</span><span class="s1">(APPLE)</span>
+    <span class="s0">set</span><span class="s1">(CMAKE_CXX_FLAGS </span><span class="s4">&quot;</span><span class="s3">${</span><span class="s1">CMAKE_CXX_FLAGS</span><span class="s3">} </span><span class="s1">-fsanitize=address</span><span class="s4">&quot;</span><span class="s1">)</span>
+<span class="s3">elseif</span><span class="s1">(UNIX)</span>
+    <span class="s0">set</span><span class="s1">(CMAKE_CXX_FLAGS </span><span class="s4">&quot;</span><span class="s3">${</span><span class="s1">CMAKE_CXX_FLAGS</span><span class="s3">} </span><span class="s1">-pthread -fsanitize=address -fsanitize=undefined</span><span class="s4">&quot;</span><span class="s1">)</span>
+<span class="s3">endif</span><span class="s1">()</span>
+
+<span class="s0">add_executable</span><span class="s1">(platformer platformer.cpp globals.h graphics.h level.h level_manager.h level_manager.cpp player.h player_controller.h player_controller.cpp enemies_controller.h enemies_controller.cpp assets.h utilities.h)</span>
+<span class="s0">target_link_libraries</span><span class="s1">(platformer PRIVATE raylib)</span>
+</pre>
+</body>
+</html>

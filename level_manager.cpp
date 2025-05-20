@@ -2,6 +2,12 @@
 #include "level.h"
 #include "globals.h"
 #include "player_controller.h"
+#include "enemies_controller.h"
+
+#include <fstream>  //  for file reading
+#include <sstream>  //  for parsing
+#include <string>
+#include <stdexcept>
 
 bool LevelManager::is_inside_level(int row, int column) {
     if (row < 0 || row >= current_level.get_rows()) return false;
@@ -12,7 +18,6 @@ bool LevelManager::is_inside_level(int row, int column) {
 bool LevelManager::is_colliding(Vector2 pos, char look_for) {
     Rectangle entity_hitbox = {pos.x, pos.y, 1.0f, 1.0f};
 
-    // Scan the adjacent area in the level to look for a match in collision
     for (int row = pos.y - 1; row < pos.y + 1; ++row) {
         for (int column = pos.x - 1; column < pos.x + 1; ++column) {
             // Check if the cell is out-of-bounds
@@ -29,7 +34,6 @@ bool LevelManager::is_colliding(Vector2 pos, char look_for) {
 }
 
 char& LevelManager::get_collider(Vector2 pos, char look_for) {
-    // Like is_colliding(), except returns a reference to the colliding object
     Rectangle player_hitbox = {pos.x, pos.y, 1.0f, 1.0f};
 
     for (int row = pos.y - 1; row < pos.y + 1; ++row) {
@@ -56,36 +60,98 @@ void LevelManager::reset_level_index() {
 void LevelManager::load_level(int offset) {
     level_index += offset;
 
-    // Win logic
-    if (level_index >= LEVEL_COUNT) {
+    try {
+        std::ifstream file("data/levels.rll");
+        if (!file.is_open()) {
+            throw std::runtime_error("Cannot open levels.rll file.");
+        }
+
+        int level_count = 0;
+        std::string line;
+        std::string level_line;
+
+        while (std::getline(file, line)) {
+            if (line.empty() || line[0] == ';') continue;
+            if (level_count == level_index) {
+                level_line = line;
+                break;
+            }
+            level_count++;
+        }
+
+        file.close();
+
+        if (level_line.empty()) {
+            throw std::runtime_error("Level line not found for current index.");
+        }
+
+        std::vector<std::vector<char>> level_rows;
+        std::vector<char> current_row;
+        size_t max_columns = 0;
+        size_t pos = 0;
+
+        while (pos < level_line.size()) {
+            if (level_line[pos] == '|') {
+                level_rows.push_back(current_row);
+                if (current_row.size() > max_columns) max_columns = current_row.size();
+                current_row.clear();
+                pos++;
+                continue;
+            }
+
+            if (isdigit(level_line[pos])) {
+                int run_length = 0;
+                while (pos < level_line.size() && isdigit(level_line[pos])) {
+                    run_length = run_length * 10 + (level_line[pos] - '0');
+                    pos++;
+                }
+                if (pos >= level_line.size()) throw std::runtime_error("Malformed RLE encoding in level data.");
+                char tile = level_line[pos++];
+                for (int i = 0; i < run_length; ++i) {
+                    current_row.push_back(tile);
+                }
+            } else {
+                current_row.push_back(level_line[pos++]);
+            }
+        }
+
+        if (!current_row.empty()) {
+            level_rows.push_back(current_row);
+            if (current_row.size() > max_columns) max_columns = current_row.size();
+        }
+
+        if (level_rows.empty()) {
+            throw std::runtime_error("Parsed level is empty.");
+        }
+
+        if (current_level_data) {
+            delete[] current_level_data;
+        }
+
+        size_t total_rows = level_rows.size();
+        current_level_data = new char[total_rows * max_columns];
+
+        for (size_t r = 0; r < total_rows; r++) {
+            for (size_t c = 0; c < max_columns; c++) {
+                current_level_data[r * max_columns + c] = (c < level_rows[r].size()) ? level_rows[r][c] : '-';
+            }
+        }
+
+        current_level.set_rows(total_rows);
+        current_level.set_columns(max_columns);
+        current_level.set_data(current_level_data);
+
+        PlayerController::get_instance().spawn_player();
+        EnemiesController::get_instance().spawn_enemies();
+        derive_graphics_metrics_from_loaded_level();
+        timer = MAX_LEVEL_TIME;
+    }
+    catch (const std::exception& e) {
+        TraceLog(LOG_ERROR, TextFormat("Level loading failed: %s", e.what()));
         game_state = VICTORY_STATE;
         create_victory_menu_background();
         level_index = 0;
-        return;
     }
-
-    // Level duplication
-    size_t rows = LEVELS[level_index].get_rows();
-    size_t columns = LEVELS[level_index].get_columns();
-    current_level_data = new char[rows*columns];
-
-    for (int row = 0; row < rows; row++) {
-        for (int column = 0; column < columns; column++) {
-            current_level_data[row * columns + column] = LEVELS[level_index].get_data()[row * columns + column];
-        }
-    }
-
-    current_level = {rows, columns, current_level_data};
-
-    // Instantiate entities
-    PlayerController::get_instance().spawn_player();
-    EnemiesController::get_instance().spawn_enemies();
-
-    // Calculate positioning and sizes
-    derive_graphics_metrics_from_loaded_level();
-
-    // Reset the timer
-    timer = MAX_LEVEL_TIME;
 }
 
 void LevelManager::unload_level() {

@@ -1,0 +1,413 @@
+<html>
+<head>
+<title>globals.h</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #b3ae60;}
+.s1 { color: #bcbec4;}
+.s2 { color: #6aab73;}
+.s3 { color: #7a7e85;}
+.s4 { color: #cf8e6d;}
+.s5 { color: #bcbec4;}
+.s6 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+globals.h</font>
+</center></td></tr></table>
+<pre><span class="s0">#ifndef </span><span class="s1">GLOBALS_H</span>
+<span class="s0">#define </span><span class="s1">GLOBALS_H</span>
+
+<span class="s0">#include </span><span class="s2">&quot;raylib.h&quot;</span>
+
+<span class="s0">#include </span><span class="s2">&lt;vector&gt;</span>
+<span class="s0">#include </span><span class="s2">&lt;string&gt;</span>
+<span class="s0">#include </span><span class="s2">&lt;cstddef&gt;</span>
+<span class="s0">#include </span><span class="s2">&lt;cmath&gt;</span>
+<span class="s0">#include </span><span class="s2">&quot;enemies_controller.h&quot;</span>
+<span class="s0">#include </span><span class="s2">&quot;level.h&quot;</span>
+<span class="s0">#include </span><span class="s2">&quot;level_manager.h&quot;</span>
+
+
+<span class="s3">/* Game Elements */</span>
+
+<span class="s4">inline const char </span><span class="s1">WALL      </span><span class="s5">= </span><span class="s2">'#'</span><span class="s5">,</span>
+                  <span class="s1">WALL_DARK </span><span class="s5">= </span><span class="s2">'='</span><span class="s5">,</span>
+                  <span class="s1">AIR       </span><span class="s5">= </span><span class="s2">'-'</span><span class="s5">,</span>
+                  <span class="s1">SPIKE     </span><span class="s5">= </span><span class="s2">'^'</span><span class="s5">,</span>
+                  <span class="s1">PLAYER    </span><span class="s5">= </span><span class="s2">'@'</span><span class="s5">,</span>
+                  <span class="s1">ENEMY     </span><span class="s5">= </span><span class="s2">'&amp;'</span><span class="s5">,</span>
+                  <span class="s1">COIN      </span><span class="s5">= </span><span class="s2">'*'</span><span class="s5">,</span>
+                  <span class="s1">EXIT      </span><span class="s5">= </span><span class="s2">'E'</span><span class="s5">;</span>
+
+<span class="s3">/* Levels */</span>
+<span class="s3">/* 
+struct level { 
+    size_t rows = 0, columns = 0; 
+    char *data = nullptr; 
+}; 
+*/</span>
+<span class="s3">/* 
+inline char LEVEL_1_DATA[] = { 
+        '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 
+        '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '*', '-', '*', '-', '-', '-', '-', '-', '*', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 
+        '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '*', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '*', '-', '-', '*', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 
+        '-', '-', '-', '-', '-', '-', '-', '-', '-', '*', '-', '-', '-', '*', '-', '-', '-', '#', '#', '#', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '*', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '*', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 
+        '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '=', '=', '=', '-', '-', '-', '-', '-', '-', '*', '-', '-', '-', '*', '-', '-', '-', '-', '*', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 
+        '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '=', '=', '=', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '*', '-', '-', '-', '*', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 
+        '#', '-', '#', '-', '#', '-', '#', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '=', '=', '=', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '#', '#', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '#', '-', '#', '-', '#', '-', '#', 
+        '#', '#', '#', '#', '#', '#', '#', '-', '-', '-', '-', '-', '-', '-', '#', '#', '#', '#', '#', '#', '-', '-', '-', '#', '#', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '#', '#', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '#', '#', '#', '#', '#', '#', '#', 
+        '#', '#', '#', '=', '#', '#', '#', '-', '-', '-', '-', '-', '-', '-', '=', '=', '=', '=', '=', '=', '-', '-', '-', '#', '#', '-', '-', '-', '-', '-', '-', '-', '#', '#', '-', '-', '-', '-', '#', '#', '-', '-', '-', '-', '-', '-', '-', '-', '#', '-', '-', '-', '-', '-', '#', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '#', '#', '#', '=', '#', '#', '#', 
+        '#', '#', '=', '=', '=', '#', '#', '-', '-', '-', '-', '-', '-', '-', '=', '=', '=', '=', '=', '=', '-', '-', '-', '#', '#', '-', '-', '-', '-', '-', '-', '-', '#', '#', '=', '=', '=', '=', '#', '#', '-', '-', '-', '-', '-', '-', '-', '#', '#', '=', '=', '=', '=', '=', '#', '#', '-', '-', '-', '-', '-', '-', '-', '-', '-', '#', '#', '=', '=', '=', '#', '#', 
+        '#', '#', '=', '=', '=', '#', '#', '-', '@', '-', '-', '-', '-', '-', '=', '=', '=', '=', '=', '=', '-', '-', '-', '#', '#', '-', '-', '-', '&amp;', '-', '-', '-', '#', '#', '=', '=', '=', '=', '#', '#', '^', '^', '-', '-', '-', '-', '#', '#', '#', '=', '=', '=', '=', '=', '#', '#', '#', '-', '-', '-', '-', '-', '-', 'E', '-', '#', '#', '=', '=', '=', '#', '#', 
+        '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '=', '=', '=', '=', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '=', '=', '=', '=', '=', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', 
+}; 
+ 
+inline Level LEVEL_1{12, 72, LEVEL_1_DATA}; 
+ 
+inline char LEVEL_2_DATA[] = { 
+        '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '^', '^', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 
+        '-', '-', '-', '-', '-', '-', '-', '-', '*', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '#', '#', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 
+        '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '*', '-', '*', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '#', '=', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '^', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 
+        '-', '-', '-', '-', '-', '-', '-', '-', '*', '-', '-', '-', '#', '#', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '#', '#', '-', '-', '#', '=', '-', '-', '-', '-', '-', '*', '-', '-', '-', '-', '#', '#', '-', '*', '-', '-', '-', '-', '-', '^', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 
+        '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '=', '=', '-', '-', '-', '-', '-', '-', '-', '-', '-', '^', '-', '-', '-', '-', '-', '-', '-', '#', '#', '-', '-', '#', '=', '-', '*', '-', '-', '-', '-', '-', '-', '-', '-', '#', '#', '-', '-', '-', '-', '-', '-', '-', '#', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 
+        '-', '-', '-', '-', '-', '-', '-', '-', '*', '-', '-', '-', '=', '=', '-', '-', '-', '-', '-', '-', '-', '-', '-', '#', '-', '-', '-', '-', '-', '-', '-', '#', '#', '-', '-', '#', '=', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '=', '=', '-', '*', '-', '-', '-', '-', '-', '#', '-', '-', '*', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 
+        '#', '-', '#', '-', '#', '-', '#', '-', '-', '-', '-', '-', '=', '=', '-', '-', '^', '^', '-', '-', '-', '-', '-', '#', '-', '-', '-', '-', '-', '-', '-', '#', '#', '-', '-', '#', '=', '-', '-', '-', '-', '-', '-', '-', '-', '^', '-', '=', '=', '-', '-', '-', '#', '#', '-', '-', '#', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '#', '-', '#', '-', '#', '-', '#', 
+        '#', '#', '#', '#', '#', '#', '#', '-', '-', '-', '-', '-', '=', '#', '#', '#', '#', '#', '#', '#', '-', '-', '-', '#', '-', '-', '-', '#', '#', '-', '-', '#', '#', '-', '-', '#', '=', '-', '-', '#', '#', '-', '-', '-', '#', '#', '-', '=', '=', '-', '*', '-', '#', '#', '-', '-', '#', '-', '-', '*', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '#', '#', '#', '#', '#', '#', '#', 
+        '#', '#', '#', '=', '#', '#', '#', '-', '-', '-', '-', '-', '=', '=', '=', '=', '=', '=', '#', '=', '-', '-', '-', '#', '-', '-', '-', '=', '#', '=', '=', '#', '#', '=', '=', '=', '=', '-', '-', '#', '=', '-', '-', '-', '=', '#', '-', '=', '=', '-', '-', '-', '=', '=', '-', '-', '#', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '#', '#', '#', '=', '#', '#', '#', 
+        '#', '#', '=', '=', '=', '#', '#', '-', '-', '-', '-', '-', '=', '=', '=', '=', '=', '=', '#', '=', '-', '-', '-', '#', '-', '-', '-', '=', '#', '=', '=', '#', '#', '=', '=', '=', '=', '-', '-', '=', '=', '-', '-', '-', '=', '=', '-', '=', '=', '-', '*', '-', '=', '=', '-', '-', '#', '-', '-', '-', '-', '-', '^', '-', '-', '-', '^', '-', '-', '-', '-', '#', '#', '=', '=', '=', '#', '#', 
+        '#', '#', '=', '=', '=', '#', '#', '-', '@', '-', '-', '-', '=', '=', '=', '=', '=', '=', '#', '=', '&amp;', '-', '&amp;', '=', '&amp;', '-', '&amp;', '=', '#', '=', '=', '#', '#', '=', '=', '#', '#', '-', '-', '=', '=', '-', '^', '-', '=', '=', '-', '=', '=', '-', '-', '-', '=', '=', '-', '-', '#', '^', '^', '-', '-', '-', '#', '-', '-', '-', '#', '-', '-', 'E', '-', '#', '#', '=', '=', '=', '#', '#', 
+        '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '=', '=', '#', '#', '=', '=', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#' 
+}; 
+ 
+inline Level LEVEL_2 = { 
+        12, 78, 
+        LEVEL_2_DATA 
+}; 
+ 
+inline char LEVEL_3_DATA[] = { 
+        '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '#', '#', '-', '-', '-', '*', '#', '#', '-', '-', '^', '^', '-', '-', '-', '-', '*', '*', '-', '-', '-', '-', '#', '#', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '#', '#', '-', '-', '-', '-', '-', '-', '-', '#', '#', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 
+        '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '*', '-', '-', '-', '-', '-', '#', '#', '-', '-', '-', '-', '=', '=', '-', '-', '#', '#', '-', '-', '-', '-', '*', '*', '-', '-', '-', '-', '#', '#', '-', '-', '-', '-', '-', '*', '-', '-', '-', '-', '-', '#', '#', '-', '-', '-', '-', '-', '-', '-', '#', '#', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 
+        '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '^', '^', '-', '-', '#', '#', '-', '-', '-', '-', '=', '=', '-', '-', '#', '#', '-', '-', '-', '-', '-', '-', '^', '^', '-', '-', '#', '#', '-', '-', '-', '-', '-', '^', '-', '-', '-', '-', '-', '#', '#', '-', '-', '-', '*', '-', '-', '-', '#', '#', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 
+        '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '#', '#', '-', '-', '#', '#', '-', '-', '#', '#', '-', '-', '-', '-', '#', '#', '-', '-', '#', '#', '-', '-', '#', '#', '-', '-', '#', '#', '-', '-', '#', '#', '-', '-', '-', '-', '-', '#', '-', '-', '-', '-', '-', '#', '#', '-', '-', '*', '-', '*', '-', '-', '#', '#', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 
+        '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '=', '=', '-', '-', '#', '#', '-', '-', '=', '=', '-', '-', '-', '-', '#', '#', '-', '-', '#', '#', '-', '-', '#', '=', '-', '-', '=', '#', '-', '-', '#', '=', '-', '-', '-', '-', '-', '#', '-', '-', '-', '-', '-', '#', '#', '-', '-', '-', '-', '-', '-', '-', '#', '#', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 
+        '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '=', '=', '-', '-', '#', '#', '-', '-', '=', '=', '-', '-', '-', '-', '#', '#', '-', '-', '#', '#', '-', '-', '#', '=', '-', '-', '=', '#', '-', '-', '=', '=', '-', '-', '#', '-', '-', '#', '-', '-', '#', '-', '-', '#', '#', '-', '*', '-', '-', '-', '*', '-', '#', '#', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 
+        '#', '-', '#', '-', '#', '-', '#', '-', '-', '-', '-', '-', '-', '=', '=', '-', '-', '=', '=', '-', '-', '=', '=', '-', '-', '-', '-', '#', '#', '-', '-', '#', '#', '-', '-', '#', '=', '-', '-', '=', '#', '-', '-', '=', '#', '-', '-', '#', '*', '-', '#', '-', '*', '#', '-', '-', '=', '=', '-', '-', '-', '-', '-', '-', '-', '=', '=', '-', '-', '^', '-', '-', '-', '-', '-', '-', '-', '-', '-', '#', '-', '#', '-', '#', '-', '#', 
+        '#', '#', '#', '#', '#', '#', '#', '-', '-', '-', '-', '-', '-', '#', '#', '-', '-', '=', '=', '*', '-', '#', '#', '-', '-', '-', '-', '#', '#', '-', '-', '=', '=', '-', '-', '#', '=', '-', '-', '=', '#', '-', '-', '#', '#', '-', '-', '#', '-', '-', '#', '-', '-', '#', '-', '-', '=', '=', '-', '-', '-', '-', '-', '-', '-', '=', '=', '-', '-', '#', '-', '-', '^', '-', '-', '-', '-', '-', '-', '#', '#', '#', '#', '#', '#', '#', 
+        '#', '#', '#', '=', '#', '#', '#', '-', '-', '-', '-', '-', '-', '#', '#', '-', '-', '=', '=', '-', '-', '#', '#', '-', '-', '-', '-', '#', '#', '-', '-', '=', '=', '-', '-', '#', '#', '-', '-', '#', '#', '-', '-', '#', '#', '-', '-', '#', '-', '-', '#', '-', '-', '#', '-', '-', '#', '#', '-', '-', '-', '-', '-', '-', '-', '#', '#', '-', '-', '#', '-', '-', '#', '-', '-', '^', '-', '-', '-', '#', '#', '#', '=', '#', '#', '#', 
+        '#', '#', '=', '=', '=', '#', '#', '-', '-', '-', '-', '-', '-', '#', '#', '-', '-', '=', '=', '-', '-', '#', '#', '-', '-', '-', '-', '#', '#', '-', '-', '#', '#', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '#', '#', '-', '-', '#', '-', '-', '#', '-', '-', '#', '-', '-', '#', '#', '=', '=', '=', '=', '=', '=', '=', '#', '#', '#', '#', '#', '-', '-', '#', '-', '-', '#', '-', '-', '-', '#', '#', '=', '=', '=', '#', '#', 
+        '#', '#', '=', '=', '=', '#', '#', '-', '@', '-', '-', '-', '-', '#', '#', '^', '^', '=', '=', '^', '^', '#', '#', '^', '^', '^', '^', '#', '#', '^', '^', '#', '#', '&amp;', '-', '-', '&amp;', '-', '-', '&amp;', '-', '-', '&amp;', '#', '#', '-', '-', '=', '&amp;', '&amp;', '=', '&amp;', '&amp;', '=', '-', '-', '#', '#', '=', '=', '#', '#', '#', '=', '=', '#', '#', '#', '#', '#', '#', '#', '#', '-', '-', '#', '-', 'E', '-', '#', '#', '=', '=', '=', '#', '#', 
+        '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '=', '=', '=', '=', '=', '=', '=', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#' 
+}; 
+ 
+inline Level LEVEL_3 = { 
+        12, 86, 
+        LEVEL_3_DATA 
+}; 
+ 
+inline int level_index = 0; 
+inline const int LEVEL_COUNT = 3; 
+ 
+inline Level LEVELS[LEVEL_COUNT] = { 
+    LEVEL_1, LEVEL_2, LEVEL_3 
+}; 
+*/</span>
+<span class="s3">/* Loaded Level Data */</span>
+<span class="s3">/* 
+inline Level current_level; 
+inline char *current_level_data; 
+*/</span>
+
+<span class="s3">/* Timer-mechanic related */</span>
+<span class="s4">inline const int </span><span class="s1">MAX_LEVEL_TIME </span><span class="s5">= </span><span class="s6">50 </span><span class="s5">* </span><span class="s6">60</span><span class="s5">;</span>
+<span class="s4">inline int </span><span class="s1">timer </span><span class="s5">= </span><span class="s1">MAX_LEVEL_TIME</span><span class="s5">;</span>
+<span class="s4">inline int </span><span class="s1">time_to_coin_counter </span><span class="s5">= </span><span class="s6">0</span><span class="s5">;</span>
+
+<span class="s3">/* Physics constants */</span>
+
+<span class="s4">inline const float </span><span class="s1">PLAYER_MOVEMENT_SPEED </span><span class="s5">= </span><span class="s6">0.1f</span><span class="s5">;</span>
+<span class="s4">inline const float </span><span class="s1">JUMP_STRENGTH         </span><span class="s5">= </span><span class="s6">0.3f</span><span class="s5">;</span>
+<span class="s4">inline const float </span><span class="s1">CEILING_BOUNCE_OFF    </span><span class="s5">= </span><span class="s6">0.05f</span><span class="s5">;</span>
+<span class="s4">inline const float </span><span class="s1">ENEMY_MOVEMENT_SPEED  </span><span class="s5">= </span><span class="s6">0.07f</span><span class="s5">;</span>
+<span class="s4">inline const float </span><span class="s1">BOUNCE_OFF_ENEMY      </span><span class="s5">= </span><span class="s6">0.1f</span><span class="s5">;</span>
+<span class="s4">inline const float </span><span class="s1">GRAVITY_FORCE         </span><span class="s5">= </span><span class="s6">0.01f</span><span class="s5">;</span>
+
+<span class="s3">/* Player data */</span>
+<span class="s3">/* 
+inline float player_y_velocity = 0; 
+inline Vector2 player_pos; 
+ 
+inline bool is_player_on_ground; 
+inline bool is_looking_forward; 
+inline bool is_moving; 
+ 
+inline int player_level_scores[LEVEL_COUNT]; 
+ 
+inline const int MAX_PLAYER_LIVES = 3; 
+inline int player_lives = MAX_PLAYER_LIVES; 
+*/</span>
+<span class="s3">/* Enemy data */</span>
+<span class="s3">/* 
+struct Enemy { 
+    Vector2 pos; 
+    bool is_looking_right; 
+}; 
+ 
+inline std::vector&lt;Enemy&gt; enemies; 
+*/</span>
+<span class="s3">/* Graphic Metrics */</span>
+
+<span class="s3">// UI</span>
+<span class="s4">inline const float </span><span class="s1">SCREEN_SCALE_DIVISOR </span><span class="s5">= </span><span class="s6">700.0f</span><span class="s5">; </span><span class="s3">// The divisor was found through experimentation</span>
+                                                  <span class="s3">// to scale things accordingly to look pleasant.</span>
+<span class="s4">inline </span><span class="s1">Vector2 screen_size</span><span class="s5">;</span>
+<span class="s4">inline float </span><span class="s1">screen_scale</span><span class="s5">; </span><span class="s3">// Used to scale str/UI components size and displacements based on the screen_size size</span>
+<span class="s4">inline float </span><span class="s1">cell_size</span><span class="s5">;</span>
+<span class="s4">inline float </span><span class="s1">horizontal_shift</span><span class="s5">;</span>
+
+<span class="s3">// Parallax background scrolling</span>
+<span class="s4">inline </span><span class="s1">Vector2 background_size</span><span class="s5">;</span>
+<span class="s4">inline float </span><span class="s1">background_y_offset</span><span class="s5">;</span>
+
+<span class="s4">inline const float </span><span class="s1">PARALLAX_PLAYER_SCROLLING_SPEED </span><span class="s5">= </span><span class="s6">0.003f</span><span class="s5">;</span>
+<span class="s4">inline const float </span><span class="s1">PARALLAX_IDLE_SCROLLING_SPEED </span><span class="s5">= </span><span class="s6">0.00005f</span><span class="s5">;</span>
+<span class="s4">inline const float </span><span class="s1">PARALLAX_LAYERED_SPEED_DIFFERENCE </span><span class="s5">= </span><span class="s6">3.0f</span><span class="s5">;</span>
+
+<span class="s3">/* Fonts */</span>
+
+<span class="s4">inline </span><span class="s1">Font menu_font</span><span class="s5">;</span>
+
+<span class="s3">/* Display Text Parameters */</span>
+
+<span class="s4">struct </span><span class="s1">Text </span><span class="s5">{</span>
+    <span class="s1">std::string str</span><span class="s5">;</span>
+    <span class="s1">Vector2 position </span><span class="s5">= {</span><span class="s6">0.50f</span><span class="s5">, </span><span class="s6">0.50f</span><span class="s5">};</span>
+    <span class="s4">float </span><span class="s1">size </span><span class="s5">= </span><span class="s6">32.0f</span><span class="s5">;</span>
+    <span class="s1">Color color </span><span class="s5">= </span><span class="s1">WHITE</span><span class="s5">;</span>
+    <span class="s4">float </span><span class="s1">spacing </span><span class="s5">= </span><span class="s6">4.0f</span><span class="s5">;</span>
+    <span class="s1">Font</span><span class="s5">* </span><span class="s1">font </span><span class="s5">= &amp;</span><span class="s1">menu_font</span><span class="s5">;</span>
+<span class="s5">};</span>
+
+<span class="s4">inline </span><span class="s1">Text game_title </span><span class="s5">= {</span>
+    <span class="s2">&quot;Platformer&quot;</span><span class="s5">,</span>
+    <span class="s5">{</span><span class="s6">0.50f</span><span class="s5">, </span><span class="s6">0.50f</span><span class="s5">},</span>
+    <span class="s6">100.0f</span><span class="s5">,</span>
+    <span class="s1">RED</span>
+<span class="s5">};</span>
+
+<span class="s4">inline </span><span class="s1">Text game_subtitle </span><span class="s5">= {</span>
+    <span class="s2">&quot;Press Enter to Start&quot;</span><span class="s5">,</span>
+    <span class="s5">{</span><span class="s6">0.50f</span><span class="s5">, </span><span class="s6">0.65f</span><span class="s5">}</span>
+<span class="s5">};</span>
+
+<span class="s4">inline </span><span class="s1">Text game_paused </span><span class="s5">= {</span>
+    <span class="s2">&quot;Press Escape to Resume&quot;</span>
+<span class="s5">};</span>
+
+<span class="s4">inline </span><span class="s1">Text death_title </span><span class="s5">= {</span>
+    <span class="s2">&quot;You Died!&quot;</span><span class="s5">,</span>
+    <span class="s5">{</span><span class="s6">0.50f</span><span class="s5">, </span><span class="s6">0.50f</span><span class="s5">},</span>
+    <span class="s6">80.0f</span><span class="s5">,</span>
+    <span class="s1">RED</span>
+<span class="s5">};</span>
+
+<span class="s4">inline </span><span class="s1">Text death_subtitle </span><span class="s5">= {</span>
+    <span class="s2">&quot;Press Enter to Try Again&quot;</span><span class="s5">,</span>
+    <span class="s5">{</span><span class="s6">0.50f</span><span class="s5">, </span><span class="s6">0.65f</span><span class="s5">}</span>
+<span class="s5">};</span>
+
+<span class="s4">inline </span><span class="s1">Text game_over_title </span><span class="s5">= {</span>
+    <span class="s2">&quot;Game Over&quot;</span><span class="s5">,</span>
+    <span class="s5">{</span><span class="s6">0.50f</span><span class="s5">, </span><span class="s6">0.50f</span><span class="s5">},</span>
+    <span class="s6">120.0f</span><span class="s5">,</span>
+    <span class="s1">RED</span>
+<span class="s5">};</span>
+
+<span class="s4">inline </span><span class="s1">Text game_over_subtitle </span><span class="s5">= {</span>
+    <span class="s2">&quot;Press Enter to Restart&quot;</span><span class="s5">,</span>
+    <span class="s5">{</span><span class="s6">0.50f</span><span class="s5">, </span><span class="s6">0.675f</span><span class="s5">}</span>
+<span class="s5">};</span>
+
+<span class="s4">inline </span><span class="s1">Text victory_title </span><span class="s5">= {</span>
+    <span class="s2">&quot;You Won!&quot;</span><span class="s5">,</span>
+    <span class="s5">{</span><span class="s6">0.50f</span><span class="s5">, </span><span class="s6">0.50f</span><span class="s5">},</span>
+    <span class="s6">100.0f</span><span class="s5">,</span>
+    <span class="s1">RED</span>
+<span class="s5">};</span>
+
+<span class="s4">inline </span><span class="s1">Text victory_subtitle </span><span class="s5">= {</span>
+    <span class="s2">&quot;Press Enter to go back to menu&quot;</span><span class="s5">,</span>
+    <span class="s5">{</span><span class="s6">0.50f</span><span class="s5">, </span><span class="s6">0.65f</span><span class="s5">}</span>
+<span class="s5">};</span>
+
+<span class="s3">/* Images and Sprites */</span>
+
+<span class="s4">struct </span><span class="s1">sprite </span><span class="s5">{</span>
+    <span class="s1">size_t frame_count    </span><span class="s5">= </span><span class="s6">0</span><span class="s5">;</span>
+    <span class="s1">size_t frames_to_skip </span><span class="s5">= </span><span class="s6">3</span><span class="s5">;</span>
+    <span class="s1">size_t frames_skipped </span><span class="s5">= </span><span class="s6">0</span><span class="s5">;</span>
+    <span class="s1">size_t frame_index    </span><span class="s5">= </span><span class="s6">0</span><span class="s5">;</span>
+    <span class="s4">bool </span><span class="s1">loop </span><span class="s5">= </span><span class="s4">true</span><span class="s5">;</span>
+    <span class="s1">size_t prev_game_frame </span><span class="s5">= </span><span class="s6">0</span><span class="s5">;</span>
+    <span class="s1">Texture2D </span><span class="s5">*</span><span class="s1">frames </span><span class="s5">= </span><span class="s4">nullptr</span><span class="s5">;</span>
+<span class="s5">};</span>
+
+<span class="s3">// Level Elements</span>
+<span class="s4">inline </span><span class="s1">Texture2D wall_image</span><span class="s5">;</span>
+<span class="s4">inline </span><span class="s1">Texture2D wall_dark_image</span><span class="s5">;</span>
+<span class="s4">inline </span><span class="s1">Texture2D spike_image</span><span class="s5">;</span>
+<span class="s4">inline </span><span class="s1">Texture2D exit_image</span><span class="s5">;</span>
+<span class="s4">inline </span><span class="s1">sprite coin_sprite</span><span class="s5">;</span>
+
+<span class="s3">// UI Elements</span>
+<span class="s4">inline </span><span class="s1">Texture2D heart_image</span><span class="s5">;</span>
+
+<span class="s3">// Player</span>
+<span class="s4">inline </span><span class="s1">Texture2D player_stand_forward_image</span><span class="s5">;</span>
+<span class="s4">inline </span><span class="s1">Texture2D player_stand_backwards_image</span><span class="s5">;</span>
+<span class="s4">inline </span><span class="s1">Texture2D player_jump_forward_image</span><span class="s5">;</span>
+<span class="s4">inline </span><span class="s1">Texture2D player_jump_backwards_image</span><span class="s5">;</span>
+<span class="s4">inline </span><span class="s1">Texture2D player_dead_image</span><span class="s5">;</span>
+<span class="s4">inline </span><span class="s1">sprite player_walk_forward_sprite</span><span class="s5">;</span>
+<span class="s4">inline </span><span class="s1">sprite player_walk_backwards_sprite</span><span class="s5">;</span>
+
+<span class="s3">// Enemy</span>
+<span class="s4">inline </span><span class="s1">sprite enemy_walk</span><span class="s5">;</span>
+
+<span class="s3">// Background Elements</span>
+<span class="s4">inline </span><span class="s1">Texture2D background</span><span class="s5">;</span>
+<span class="s4">inline </span><span class="s1">Texture2D middleground</span><span class="s5">;</span>
+<span class="s4">inline </span><span class="s1">Texture2D foreground</span><span class="s5">;</span>
+
+<span class="s3">/* Sounds */</span>
+
+<span class="s4">inline </span><span class="s1">Sound coin_sound</span><span class="s5">;</span>
+<span class="s4">inline </span><span class="s1">Sound exit_sound</span><span class="s5">;</span>
+<span class="s4">inline </span><span class="s1">Sound player_death_sound</span><span class="s5">;</span>
+<span class="s4">inline </span><span class="s1">Sound kill_enemy_sound</span><span class="s5">;</span>
+<span class="s4">inline </span><span class="s1">Sound game_over_sound</span><span class="s5">;</span>
+
+<span class="s3">/* Victory Menu Background */</span>
+
+<span class="s4">struct </span><span class="s1">victory_ball </span><span class="s5">{</span>
+    <span class="s4">float </span><span class="s1">x</span><span class="s5">, </span><span class="s1">y</span><span class="s5">;</span>
+    <span class="s4">float </span><span class="s1">dx</span><span class="s5">, </span><span class="s1">dy</span><span class="s5">;</span>
+    <span class="s4">float </span><span class="s1">radius</span><span class="s5">;</span>
+<span class="s5">};</span>
+
+<span class="s4">inline const </span><span class="s1">size_t VICTORY_BALL_COUNT     </span><span class="s5">= </span><span class="s6">2000</span><span class="s5">;</span>
+<span class="s4">inline const float </span><span class="s1">VICTORY_BALL_MAX_SPEED  </span><span class="s5">= </span><span class="s6">2.0f</span><span class="s5">;</span>
+<span class="s4">inline const float </span><span class="s1">VICTORY_BALL_MIN_RADIUS </span><span class="s5">= </span><span class="s6">2.0f</span><span class="s5">;</span>
+<span class="s4">inline const float </span><span class="s1">VICTORY_BALL_MAX_RADIUS </span><span class="s5">= </span><span class="s6">3.0f</span><span class="s5">;</span>
+<span class="s4">inline const </span><span class="s1">Color VICTORY_BALL_COLOR      </span><span class="s5">= { </span><span class="s6">180</span><span class="s5">, </span><span class="s6">180</span><span class="s5">, </span><span class="s6">180</span><span class="s5">, </span><span class="s6">255 </span><span class="s5">};</span>
+<span class="s4">inline const unsigned char </span><span class="s1">VICTORY_BALL_TRAIL_TRANSPARENCY </span><span class="s5">= </span><span class="s6">10</span><span class="s5">;</span>
+<span class="s4">inline </span><span class="s1">victory_ball victory_balls</span><span class="s5">[</span><span class="s1">VICTORY_BALL_COUNT</span><span class="s5">];</span>
+
+<span class="s3">/* Frame Counter */</span>
+
+<span class="s4">inline </span><span class="s1">size_t game_frame </span><span class="s5">= </span><span class="s6">0</span><span class="s5">;</span>
+
+<span class="s3">/* Game States */</span>
+
+<span class="s4">enum </span><span class="s1">game_state </span><span class="s5">{</span>
+    <span class="s1">MENU_STATE</span><span class="s5">,</span>
+    <span class="s1">GAME_STATE</span><span class="s5">,</span>
+    <span class="s1">PAUSED_STATE</span><span class="s5">,</span>
+    <span class="s1">DEATH_STATE</span><span class="s5">,</span>
+    <span class="s1">GAME_OVER_STATE</span><span class="s5">,</span>
+    <span class="s1">VICTORY_STATE</span>
+<span class="s5">};</span>
+<span class="s4">inline </span><span class="s1">game_state game_state </span><span class="s5">= </span><span class="s1">MENU_STATE</span><span class="s5">;</span>
+
+<span class="s3">/* Forward Declarations */</span>
+
+<span class="s3">// GRAPHICS_H</span>
+
+<span class="s4">void </span><span class="s1">draw_text</span><span class="s5">(</span><span class="s1">Text </span><span class="s5">&amp;</span><span class="s1">text</span><span class="s5">);</span>
+<span class="s4">void </span><span class="s1">derive_graphics_metrics_from_loaded_level</span><span class="s5">();</span>
+<span class="s4">void </span><span class="s1">draw_game_overlay</span><span class="s5">();</span>
+<span class="s4">void </span><span class="s1">draw_level</span><span class="s5">();</span>
+<span class="s4">void </span><span class="s1">draw_player</span><span class="s5">();</span>
+<span class="s4">void </span><span class="s1">draw_enemies</span><span class="s5">();</span>
+<span class="s4">void </span><span class="s1">draw_menu</span><span class="s5">();</span>
+
+<span class="s4">void </span><span class="s1">draw_pause_menu</span><span class="s5">();</span>
+<span class="s4">void </span><span class="s1">draw_death_screen</span><span class="s5">();</span>
+<span class="s4">void </span><span class="s1">draw_game_over_menu</span><span class="s5">();</span>
+
+<span class="s4">void </span><span class="s1">create_victory_menu_background</span><span class="s5">();</span>
+<span class="s4">void </span><span class="s1">animate_victory_menu_background</span><span class="s5">();</span>
+<span class="s4">void </span><span class="s1">draw_victory_menu_background</span><span class="s5">();</span>
+<span class="s4">void </span><span class="s1">draw_victory_menu</span><span class="s5">();</span>
+
+<span class="s3">// LEVEL_H</span>
+
+<span class="s4">bool </span><span class="s1">is_inside_level</span><span class="s5">(</span><span class="s4">int </span><span class="s1">row</span><span class="s5">, </span><span class="s4">int </span><span class="s1">column</span><span class="s5">);</span>
+<span class="s4">bool </span><span class="s1">is_colliding</span><span class="s5">(</span><span class="s1">Vector2 pos</span><span class="s5">, </span><span class="s4">char </span><span class="s1">look_for </span><span class="s5">= </span><span class="s2">'#'</span><span class="s5">);</span>
+<span class="s4">char</span><span class="s5">&amp; </span><span class="s1">get_collider</span><span class="s5">(</span><span class="s1">Vector2 pos</span><span class="s5">, </span><span class="s4">char </span><span class="s1">look_for</span><span class="s5">);</span>
+
+<span class="s4">void </span><span class="s1">reset_level_index</span><span class="s5">();</span>
+<span class="s4">void </span><span class="s1">load_level</span><span class="s5">(</span><span class="s4">int </span><span class="s1">offset </span><span class="s5">= </span><span class="s6">0</span><span class="s5">);</span>
+<span class="s4">void </span><span class="s1">unload_level</span><span class="s5">();</span>
+
+<span class="s4">char</span><span class="s5">&amp; </span><span class="s1">get_level_cell</span><span class="s5">(</span><span class="s1">size_t row</span><span class="s5">, </span><span class="s1">size_t column</span><span class="s5">);</span>
+<span class="s4">void </span><span class="s1">set_level_cell</span><span class="s5">(</span><span class="s1">size_t row</span><span class="s5">, </span><span class="s1">size_t column</span><span class="s5">, </span><span class="s4">char </span><span class="s1">chr</span><span class="s5">);</span>
+
+<span class="s3">// PLAYER_H</span>
+
+<span class="s3">// void reset_player_stats();</span>
+<span class="s3">// void increment_player_score();</span>
+<span class="s3">// int get_total_player_score();</span>
+<span class="s3">//</span>
+<span class="s3">// void spawn_player();</span>
+<span class="s3">// void kill_player();</span>
+<span class="s3">//</span>
+<span class="s3">// void move_player_horizontally(float delta);</span>
+<span class="s3">// void update_player();</span>
+<span class="s3">// void update_player_gravity();</span>
+
+<span class="s3">// ENEMY_H</span>
+<span class="s3">/* 
+void spawn_enemies(); 
+ 
+void update_enemies(); 
+ 
+bool is_colliding_with_enemies(Vector2 pos); 
+void remove_colliding_enemy(Vector2 pos); 
+*/</span>
+<span class="s3">// ASSETS_H</span>
+
+<span class="s4">void </span><span class="s1">load_fonts</span><span class="s5">();</span>
+<span class="s4">void </span><span class="s1">unload_fonts</span><span class="s5">();</span>
+
+<span class="s4">void </span><span class="s1">load_images</span><span class="s5">();</span>
+<span class="s4">void </span><span class="s1">unload_images</span><span class="s5">();</span>
+
+<span class="s4">void </span><span class="s1">draw_image</span><span class="s5">(</span><span class="s1">Texture2D image</span><span class="s5">, </span><span class="s1">Vector2 pos</span><span class="s5">, </span><span class="s4">float </span><span class="s1">width</span><span class="s5">, </span><span class="s4">float </span><span class="s1">height</span><span class="s5">);</span>
+<span class="s4">void </span><span class="s1">draw_image</span><span class="s5">(</span><span class="s1">Texture2D image</span><span class="s5">, </span><span class="s1">Vector2 pos</span><span class="s5">, </span><span class="s4">float </span><span class="s1">size</span><span class="s5">);</span>
+
+<span class="s1">sprite load_sprite</span><span class="s5">(</span>
+        <span class="s4">const </span><span class="s1">std::string </span><span class="s5">&amp;</span><span class="s1">file_name_prefix</span><span class="s5">,</span>
+        <span class="s4">const </span><span class="s1">std::string </span><span class="s5">&amp;</span><span class="s1">file_name_suffix</span><span class="s5">,</span>
+        <span class="s1">size_t frame_count </span><span class="s5">= </span><span class="s6">1</span><span class="s5">,</span>
+        <span class="s4">bool </span><span class="s1">loop </span><span class="s5">= </span><span class="s4">true</span><span class="s5">,</span>
+        <span class="s1">size_t frames_to_skip </span><span class="s5">= </span><span class="s6">3</span>
+<span class="s5">);</span>
+<span class="s4">void </span><span class="s1">unload_sprite</span><span class="s5">(</span><span class="s1">sprite </span><span class="s5">&amp;</span><span class="s1">sprite</span><span class="s5">);</span>
+<span class="s4">void </span><span class="s1">draw_sprite</span><span class="s5">(</span><span class="s1">sprite </span><span class="s5">&amp;</span><span class="s1">sprite</span><span class="s5">, </span><span class="s1">Vector2 pos</span><span class="s5">, </span><span class="s4">float </span><span class="s1">width</span><span class="s5">, </span><span class="s4">float </span><span class="s1">height</span><span class="s5">);</span>
+<span class="s4">void </span><span class="s1">draw_sprite</span><span class="s5">(</span><span class="s1">sprite </span><span class="s5">&amp;</span><span class="s1">sprite</span><span class="s5">, </span><span class="s1">Vector2 pos</span><span class="s5">, </span><span class="s4">float </span><span class="s1">size</span><span class="s5">);</span>
+
+<span class="s4">void </span><span class="s1">load_sounds</span><span class="s5">();</span>
+<span class="s4">void </span><span class="s1">unload_sounds</span><span class="s5">();</span>
+
+<span class="s3">// UTILITIES_H</span>
+
+<span class="s4">float </span><span class="s1">rand_from_to</span><span class="s5">(</span><span class="s4">float </span><span class="s1">from</span><span class="s5">, </span><span class="s4">float </span><span class="s1">to</span><span class="s5">);</span>
+<span class="s4">float </span><span class="s1">rand_up_to</span><span class="s5">(</span><span class="s4">float </span><span class="s1">to</span><span class="s5">);</span>
+
+<span class="s0">#endif </span><span class="s3">// GLOBALS_H</span></pre>
+</body>
+</html>

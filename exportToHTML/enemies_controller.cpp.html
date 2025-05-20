@@ -1,0 +1,91 @@
+<html>
+<head>
+<title>enemies_controller.cpp</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #b3ae60;}
+.s1 { color: #bcbec4;}
+.s2 { color: #6aab73;}
+.s3 { color: #cf8e6d;}
+.s4 { color: #bcbec4;}
+.s5 { color: #7a7e85;}
+.s6 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+enemies_controller.cpp</font>
+</center></td></tr></table>
+<pre><span class="s0">#include </span><span class="s2">&quot;enemies_controller.h&quot;</span>
+<span class="s0">#include </span><span class="s2">&quot;globals.h&quot;</span>
+<span class="s0">#include </span><span class="s2">&quot;level.h&quot;</span>
+
+<span class="s3">void </span><span class="s1">EnemiesController::spawn_enemies</span><span class="s4">() {</span>
+    <span class="s5">// Create enemies, incrementing their amount every time a new one is created</span>
+    <span class="s1">enemies</span><span class="s4">.</span><span class="s1">clear</span><span class="s4">();</span>
+
+    <span class="s3">for </span><span class="s4">(</span><span class="s1">size_t row </span><span class="s4">= </span><span class="s6">0</span><span class="s4">; </span><span class="s1">row </span><span class="s4">&lt; </span><span class="s1">current_level</span><span class="s4">.</span><span class="s1">get_rows</span><span class="s4">(); ++</span><span class="s1">row</span><span class="s4">) {</span>
+        <span class="s3">for </span><span class="s4">(</span><span class="s1">size_t column </span><span class="s4">= </span><span class="s6">0</span><span class="s4">; </span><span class="s1">column </span><span class="s4">&lt; </span><span class="s1">current_level</span><span class="s4">.</span><span class="s1">get_columns</span><span class="s4">(); ++</span><span class="s1">column</span><span class="s4">) {</span>
+            <span class="s3">if </span><span class="s4">(</span><span class="s3">const char </span><span class="s1">cell </span><span class="s4">= </span><span class="s1">LevelManager::get_instance</span><span class="s4">().</span><span class="s1">get_level_cell</span><span class="s4">(</span><span class="s1">row</span><span class="s4">, </span><span class="s1">column</span><span class="s4">); </span><span class="s1">cell </span><span class="s4">== </span><span class="s1">ENEMY</span><span class="s4">) {</span>
+                <span class="s5">// Instantiate and add an enemy to the level</span>
+                <span class="s1">enemies</span><span class="s4">.</span><span class="s1">push_back</span><span class="s4">({</span>
+                        <span class="s4">{</span><span class="s3">static_cast</span><span class="s4">&lt;</span><span class="s3">float</span><span class="s4">&gt;(</span><span class="s1">column</span><span class="s4">), </span><span class="s3">static_cast</span><span class="s4">&lt;</span><span class="s3">float</span><span class="s4">&gt;(</span><span class="s1">row</span><span class="s4">)},</span>
+                        <span class="s3">true</span>
+                <span class="s4">});</span>
+
+                <span class="s1">LevelManager::get_instance</span><span class="s4">().</span><span class="s1">set_level_cell</span><span class="s4">(</span><span class="s1">row</span><span class="s4">, </span><span class="s1">column</span><span class="s4">, </span><span class="s1">AIR</span><span class="s4">);</span>
+            <span class="s4">}</span>
+        <span class="s4">}</span>
+    <span class="s4">}</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">EnemiesController::update_enemies</span><span class="s4">() {</span>
+    <span class="s3">for </span><span class="s4">(</span><span class="s3">auto </span><span class="s4">&amp;</span><span class="s1">enemy : enemies</span><span class="s4">) {</span>
+        <span class="s5">// Find the enemy's next x</span>
+        <span class="s3">float </span><span class="s1">next_x </span><span class="s4">= </span><span class="s1">enemy</span><span class="s4">.</span><span class="s1">get_pos</span><span class="s4">().</span><span class="s1">x</span><span class="s4">;</span>
+        <span class="s1">next_x </span><span class="s4">+= </span><span class="s1">enemy</span><span class="s4">.</span><span class="s1">is_looking_right</span><span class="s4">() </span><span class="s1">? ENEMY_MOVEMENT_SPEED : </span><span class="s4">-</span><span class="s1">ENEMY_MOVEMENT_SPEED</span><span class="s4">;</span>
+
+        <span class="s5">// If its next position collides with a wall, turn around</span>
+        <span class="s3">if </span><span class="s4">(</span><span class="s1">LevelManager::get_instance</span><span class="s4">().</span><span class="s1">is_colliding</span><span class="s4">({</span><span class="s1">next_x</span><span class="s4">, </span><span class="s1">enemy</span><span class="s4">.</span><span class="s1">get_pos</span><span class="s4">().</span><span class="s1">y</span><span class="s4">}, </span><span class="s1">WALL</span><span class="s4">)) {</span>
+            <span class="s1">enemy</span><span class="s4">.</span><span class="s1">set_looking_right</span><span class="s4">(!</span><span class="s1">enemy</span><span class="s4">.</span><span class="s1">is_looking_right</span><span class="s4">());</span>
+        <span class="s4">}</span>
+        <span class="s5">// Otherwise, keep moving</span>
+        <span class="s3">else </span><span class="s4">{</span>
+            <span class="s1">enemy</span><span class="s4">.</span><span class="s1">set_pos</span><span class="s4">(</span><span class="s1">Vector2</span><span class="s4">{</span><span class="s1">next_x</span><span class="s4">, </span><span class="s1">enemy</span><span class="s4">.</span><span class="s1">get_pos</span><span class="s4">().</span><span class="s1">y</span><span class="s4">});</span>
+        <span class="s4">}</span>
+    <span class="s4">}</span>
+<span class="s4">}</span>
+
+<span class="s5">// Custom is_colliding function for enemies</span>
+<span class="s3">bool </span><span class="s1">EnemiesController::is_colliding_with_enemies</span><span class="s4">(</span><span class="s1">Vector2 pos</span><span class="s4">) </span><span class="s3">const </span><span class="s4">{</span>
+    <span class="s3">const </span><span class="s1">Rectangle entity_hitbox </span><span class="s4">= {</span><span class="s1">pos</span><span class="s4">.</span><span class="s1">x</span><span class="s4">, </span><span class="s1">pos</span><span class="s4">.</span><span class="s1">y</span><span class="s4">, </span><span class="s6">1.0f</span><span class="s4">, </span><span class="s6">1.0f</span><span class="s4">};</span>
+
+    <span class="s3">for </span><span class="s4">(</span><span class="s3">auto </span><span class="s4">&amp;</span><span class="s1">enemy : enemies</span><span class="s4">) {</span>
+        <span class="s1">Rectangle enemy_hitbox </span><span class="s4">= {(</span><span class="s3">float</span><span class="s4">) </span><span class="s1">enemy</span><span class="s4">.</span><span class="s1">get_pos</span><span class="s4">().</span><span class="s1">x</span><span class="s4">, (</span><span class="s3">float</span><span class="s4">) </span><span class="s1">enemy</span><span class="s4">.</span><span class="s1">get_pos</span><span class="s4">().</span><span class="s1">y</span><span class="s4">, </span><span class="s6">1.0f</span><span class="s4">, </span><span class="s6">1.0f</span><span class="s4">};</span>
+        <span class="s3">if </span><span class="s4">(</span><span class="s1">CheckCollisionRecs</span><span class="s4">(</span><span class="s1">entity_hitbox</span><span class="s4">, </span><span class="s1">enemy_hitbox</span><span class="s4">)) {</span>
+            <span class="s3">return true</span><span class="s4">;</span>
+        <span class="s4">}</span>
+    <span class="s4">}</span>
+    <span class="s3">return false</span><span class="s4">;</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">EnemiesController::remove_colliding_enemy</span><span class="s4">(</span><span class="s3">const </span><span class="s1">Vector2 pos</span><span class="s4">)  {</span>
+    <span class="s3">const </span><span class="s1">Rectangle entity_hitbox </span><span class="s4">= {</span><span class="s1">pos</span><span class="s4">.</span><span class="s1">x</span><span class="s4">, </span><span class="s1">pos</span><span class="s4">.</span><span class="s1">y</span><span class="s4">, </span><span class="s6">1.0f</span><span class="s4">, </span><span class="s6">1.0f</span><span class="s4">};</span>
+
+    <span class="s3">for </span><span class="s4">(</span><span class="s3">auto </span><span class="s1">it </span><span class="s4">= </span><span class="s1">enemies</span><span class="s4">.</span><span class="s1">begin</span><span class="s4">(); </span><span class="s1">it </span><span class="s4">!= </span><span class="s1">enemies</span><span class="s4">.</span><span class="s1">end</span><span class="s4">(); ++</span><span class="s1">it</span><span class="s4">) {</span>
+        <span class="s1">Rectangle enemy_hitbox </span><span class="s4">= {</span><span class="s1">it</span><span class="s4">-&gt;</span><span class="s1">get_pos</span><span class="s4">().</span><span class="s1">x</span><span class="s4">, </span><span class="s1">it</span><span class="s4">-&gt;</span><span class="s1">get_pos</span><span class="s4">().</span><span class="s1">y</span><span class="s4">, </span><span class="s6">1.0f</span><span class="s4">, </span><span class="s6">1.0f</span><span class="s4">};</span>
+        <span class="s5">// Erase a colliding enemy</span>
+        <span class="s3">if </span><span class="s4">(</span><span class="s1">CheckCollisionRecs</span><span class="s4">(</span><span class="s1">entity_hitbox</span><span class="s4">, </span><span class="s1">enemy_hitbox</span><span class="s4">)) {</span>
+            <span class="s1">enemies</span><span class="s4">.</span><span class="s1">erase</span><span class="s4">(</span><span class="s1">it</span><span class="s4">);</span>
+
+            <span class="s5">// Call the function again to remove any remaining colliding enemies</span>
+            <span class="s5">// Cannot continue as calling erase on a vector invalidates current iterators</span>
+            <span class="s1">remove_colliding_enemy</span><span class="s4">(</span><span class="s1">pos</span><span class="s4">);</span>
+            <span class="s3">return</span><span class="s4">;</span>
+        <span class="s4">}</span>
+    <span class="s4">}</span>
+<span class="s4">}</span></pre>
+</body>
+</html>

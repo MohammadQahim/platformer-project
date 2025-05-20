@@ -1,0 +1,168 @@
+<html>
+<head>
+<title>player_controller.cpp</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #b3ae60;}
+.s1 { color: #bcbec4;}
+.s2 { color: #6aab73;}
+.s3 { color: #cf8e6d;}
+.s4 { color: #bcbec4;}
+.s5 { color: #2aacb8;}
+.s6 { color: #7a7e85;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+player_controller.cpp</font>
+</center></td></tr></table>
+<pre><span class="s0">#include </span><span class="s2">&quot;globals.h&quot;</span>
+<span class="s0">#include </span><span class="s2">&quot;player.h&quot;</span>
+<span class="s0">#include </span><span class="s2">&quot;player_controller.h&quot;</span>
+
+<span class="s3">void </span><span class="s1">PlayerController::reset_player_stats</span><span class="s4">() {</span>
+    <span class="s1">player_lives </span><span class="s4">= </span><span class="s1">MAX_PLAYER_LIVES</span><span class="s4">;</span>
+    <span class="s3">for </span><span class="s4">(</span><span class="s3">int </span><span class="s1">i </span><span class="s4">= </span><span class="s5">0</span><span class="s4">; </span><span class="s1">i </span><span class="s4">&lt; </span><span class="s1">LEVEL_COUNT</span><span class="s4">; </span><span class="s1">i</span><span class="s4">++) {</span>
+        <span class="s1">player_level_scores</span><span class="s4">[</span><span class="s1">i</span><span class="s4">] = </span><span class="s5">0</span><span class="s4">;</span>
+    <span class="s4">}</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">PlayerController::increment_player_score</span><span class="s4">() {</span>
+    <span class="s1">PlaySound</span><span class="s4">(</span><span class="s1">coin_sound</span><span class="s4">);</span>
+    <span class="s1">player_level_scores</span><span class="s4">[</span><span class="s1">level_index</span><span class="s4">]++;</span>
+<span class="s4">}</span>
+
+<span class="s3">int </span><span class="s1">PlayerController::get_total_player_score</span><span class="s4">() </span><span class="s3">const </span><span class="s4">{</span>
+    <span class="s3">int </span><span class="s1">sum </span><span class="s4">= </span><span class="s5">0</span><span class="s4">;</span>
+
+    <span class="s3">for </span><span class="s4">(</span><span class="s3">int </span><span class="s1">i </span><span class="s4">= </span><span class="s5">0</span><span class="s4">; </span><span class="s1">i </span><span class="s4">&lt; </span><span class="s1">LEVEL_COUNT</span><span class="s4">; </span><span class="s1">i</span><span class="s4">++) {</span>
+        <span class="s1">sum </span><span class="s4">+= </span><span class="s1">player_level_scores</span><span class="s4">[</span><span class="s1">i</span><span class="s4">];</span>
+    <span class="s4">}</span>
+
+    <span class="s3">return </span><span class="s1">sum</span><span class="s4">;</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">PlayerController::spawn_player</span><span class="s4">() {</span>
+    <span class="s1">player</span><span class="s4">.</span><span class="s1">set_player_y_velocity</span><span class="s4">(</span><span class="s5">0</span><span class="s4">);</span>
+
+    <span class="s3">for </span><span class="s4">(</span><span class="s1">size_t row </span><span class="s4">= </span><span class="s5">0</span><span class="s4">; </span><span class="s1">row </span><span class="s4">&lt; </span><span class="s1">current_level</span><span class="s4">.</span><span class="s1">get_rows</span><span class="s4">(); ++</span><span class="s1">row</span><span class="s4">) {</span>
+        <span class="s3">for </span><span class="s4">(</span><span class="s1">size_t column </span><span class="s4">= </span><span class="s5">0</span><span class="s4">; </span><span class="s1">column </span><span class="s4">&lt; </span><span class="s1">current_level</span><span class="s4">.</span><span class="s1">get_columns</span><span class="s4">(); ++</span><span class="s1">column</span><span class="s4">) {</span>
+            <span class="s3">char </span><span class="s1">cell </span><span class="s4">= </span><span class="s1">LevelManager::get_instance</span><span class="s4">().</span><span class="s1">get_level_cell</span><span class="s4">(</span><span class="s1">row</span><span class="s4">, </span><span class="s1">column</span><span class="s4">);;</span>
+
+            <span class="s3">if </span><span class="s4">(</span><span class="s1">cell </span><span class="s4">== </span><span class="s1">PLAYER</span><span class="s4">) {</span>
+                <span class="s1">player</span><span class="s4">.</span><span class="s1">set_player_x</span><span class="s4">(</span><span class="s1">column</span><span class="s4">);</span>
+                <span class="s1">player</span><span class="s4">.</span><span class="s1">set_player_y</span><span class="s4">(</span><span class="s1">row</span><span class="s4">);</span>
+                <span class="s1">LevelManager::get_instance</span><span class="s4">().</span><span class="s1">set_level_cell</span><span class="s4">(</span><span class="s1">row</span><span class="s4">, </span><span class="s1">column</span><span class="s4">, </span><span class="s1">AIR</span><span class="s4">);</span>
+                <span class="s3">return</span><span class="s4">;</span>
+            <span class="s4">}</span>
+        <span class="s4">}</span>
+    <span class="s4">}</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">PlayerController::kill_player</span><span class="s4">() {</span>
+    <span class="s6">// Decrement a life and reset all collected coins in the current level</span>
+    <span class="s1">PlaySound</span><span class="s4">(</span><span class="s1">player_death_sound</span><span class="s4">);</span>
+    <span class="s1">game_state </span><span class="s4">= </span><span class="s1">DEATH_STATE</span><span class="s4">;</span>
+    <span class="s1">player_lives</span><span class="s4">--;</span>
+    <span class="s1">player_level_scores</span><span class="s4">[</span><span class="s1">level_index</span><span class="s4">] = </span><span class="s5">0</span><span class="s4">;</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">PlayerController::move_player_horizontally</span><span class="s4">(</span><span class="s3">float </span><span class="s1">delta</span><span class="s4">) {</span>
+    <span class="s6">// See if the player can move further without touching a wall;</span>
+    <span class="s6">// otherwise, prevent them from getting into a wall by rounding their position</span>
+    <span class="s3">float </span><span class="s1">next_x </span><span class="s4">= </span><span class="s1">player</span><span class="s4">.</span><span class="s1">get_player_pos</span><span class="s4">().</span><span class="s1">x </span><span class="s4">+ </span><span class="s1">delta</span><span class="s4">;</span>
+    <span class="s3">if </span><span class="s4">(!</span><span class="s1">LevelManager::get_instance</span><span class="s4">().</span><span class="s1">is_colliding</span><span class="s4">({</span><span class="s1">next_x</span><span class="s4">, </span><span class="s1">player</span><span class="s4">.</span><span class="s1">get_player_pos</span><span class="s4">().</span><span class="s1">y</span><span class="s4">}, </span><span class="s1">WALL</span><span class="s4">)) {</span>
+        <span class="s1">player</span><span class="s4">.</span><span class="s1">set_player_x</span><span class="s4">(</span><span class="s1">next_x</span><span class="s4">);</span>
+    <span class="s4">}</span>
+    <span class="s3">else </span><span class="s4">{</span>
+        <span class="s1">player</span><span class="s4">.</span><span class="s1">set_player_x</span><span class="s4">(</span><span class="s1">roundf</span><span class="s4">(</span><span class="s1">player</span><span class="s4">.</span><span class="s1">get_player_pos</span><span class="s4">().</span><span class="s1">x</span><span class="s4">));</span>
+        <span class="s3">return</span><span class="s4">;</span>
+    <span class="s4">}</span>
+
+    <span class="s6">// For drawing player animations</span>
+    <span class="s1">player</span><span class="s4">.</span><span class="s1">set_looking_forward</span><span class="s4">(</span><span class="s1">delta </span><span class="s4">&gt; </span><span class="s5">0</span><span class="s4">);</span>
+    <span class="s3">if </span><span class="s4">(</span><span class="s1">delta </span><span class="s4">!= </span><span class="s5">0</span><span class="s4">) </span><span class="s1">player</span><span class="s4">.</span><span class="s1">set_moving</span><span class="s4">(</span><span class="s3">true</span><span class="s4">);</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">PlayerController::update_player_gravity</span><span class="s4">() {</span>
+    <span class="s6">// Bounce downwards if approaching a ceiling with upwards velocity</span>
+    <span class="s3">if </span><span class="s4">(</span><span class="s1">LevelManager::get_instance</span><span class="s4">().</span><span class="s1">is_colliding</span><span class="s4">({</span><span class="s1">player</span><span class="s4">.</span><span class="s1">get_player_pos</span><span class="s4">().</span><span class="s1">x</span><span class="s4">, </span><span class="s1">player</span><span class="s4">.</span><span class="s1">get_player_pos</span><span class="s4">().</span><span class="s1">y </span><span class="s4">- </span><span class="s5">0.1f</span><span class="s4">}, </span><span class="s1">WALL</span><span class="s4">) &amp;&amp; </span><span class="s1">player</span><span class="s4">.</span><span class="s1">get_player_y_velocity</span><span class="s4">() &lt; </span><span class="s5">0</span><span class="s4">) {</span>
+        <span class="s1">player</span><span class="s4">.</span><span class="s1">set_player_y_velocity</span><span class="s4">(</span><span class="s1">CEILING_BOUNCE_OFF</span><span class="s4">);</span>
+    <span class="s4">}</span>
+
+    <span class="s6">// Add gravity to player's y-position</span>
+    <span class="s1">Vector2 pos </span><span class="s4">= </span><span class="s1">player</span><span class="s4">.</span><span class="s1">get_player_pos</span><span class="s4">();</span>
+    <span class="s1">pos</span><span class="s4">.</span><span class="s1">y </span><span class="s4">+= </span><span class="s1">player</span><span class="s4">.</span><span class="s1">get_player_y_velocity</span><span class="s4">();</span>
+    <span class="s1">player</span><span class="s4">.</span><span class="s1">set_player_pos</span><span class="s4">(</span><span class="s1">pos</span><span class="s4">);</span>
+    <span class="s1">player</span><span class="s4">.</span><span class="s1">set_player_y_velocity</span><span class="s4">(</span><span class="s1">player</span><span class="s4">.</span><span class="s1">get_player_y_velocity</span><span class="s4">() + </span><span class="s1">GRAVITY_FORCE</span><span class="s4">);</span>
+
+    <span class="s6">// If the player is on ground, zero player's y-velocity</span>
+    <span class="s6">// If the player is *in* ground, pull them out by rounding their position</span>
+    <span class="s1">player</span><span class="s4">.</span><span class="s1">set_player_on_ground</span><span class="s4">(</span><span class="s1">LevelManager::get_instance</span><span class="s4">().</span><span class="s1">is_colliding</span><span class="s4">({</span><span class="s1">pos</span><span class="s4">.</span><span class="s1">x</span><span class="s4">, </span><span class="s1">pos</span><span class="s4">.</span><span class="s1">y </span><span class="s4">+ </span><span class="s5">0.1f</span><span class="s4">}, </span><span class="s1">WALL</span><span class="s4">));</span>
+    <span class="s3">if </span><span class="s4">(</span><span class="s1">player</span><span class="s4">.</span><span class="s1">is_player_on_ground</span><span class="s4">()) {</span>
+        <span class="s1">player</span><span class="s4">.</span><span class="s1">set_player_y_velocity</span><span class="s4">(</span><span class="s5">0</span><span class="s4">);</span>
+        <span class="s1">pos</span><span class="s4">.</span><span class="s1">y </span><span class="s4">= </span><span class="s1">roundf</span><span class="s4">(</span><span class="s1">pos</span><span class="s4">.</span><span class="s1">y</span><span class="s4">);</span>
+        <span class="s1">player</span><span class="s4">.</span><span class="s1">set_player_pos</span><span class="s4">(</span><span class="s1">pos</span><span class="s4">);</span>
+    <span class="s4">}</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">PlayerController::update_player</span><span class="s4">() {</span>
+    <span class="s1">update_player_gravity</span><span class="s4">();</span>
+
+    <span class="s6">// Interacting with other level elements</span>
+    <span class="s3">if </span><span class="s4">(</span><span class="s1">LevelManager::get_instance</span><span class="s4">().</span><span class="s1">is_colliding</span><span class="s4">(</span><span class="s1">player</span><span class="s4">.</span><span class="s1">get_player_pos</span><span class="s4">(), </span><span class="s1">COIN</span><span class="s4">)) {</span>
+        <span class="s1">LevelManager::get_instance</span><span class="s4">().</span><span class="s1">get_collider</span><span class="s4">(</span><span class="s1">player</span><span class="s4">.</span><span class="s1">get_player_pos</span><span class="s4">(), </span><span class="s1">COIN</span><span class="s4">) = </span><span class="s1">AIR</span><span class="s4">; </span><span class="s6">// Removes the coin</span>
+        <span class="s1">increment_player_score</span><span class="s4">();</span>
+    <span class="s4">}</span>
+
+    <span class="s3">if </span><span class="s4">(</span><span class="s1">LevelManager::get_instance</span><span class="s4">().</span><span class="s1">is_colliding</span><span class="s4">(</span><span class="s1">player</span><span class="s4">.</span><span class="s1">get_player_pos</span><span class="s4">(), </span><span class="s1">EXIT</span><span class="s4">)) {</span>
+        <span class="s6">// Reward player for being swift</span>
+        <span class="s3">if </span><span class="s4">(</span><span class="s1">timer </span><span class="s4">&gt; </span><span class="s5">0</span><span class="s4">) {</span>
+            <span class="s6">// For every 9 seconds remaining, award the player 1 coin</span>
+            <span class="s1">timer </span><span class="s4">-= </span><span class="s5">25</span><span class="s4">;</span>
+            <span class="s1">time_to_coin_counter </span><span class="s4">+= </span><span class="s5">5</span><span class="s4">;</span>
+
+            <span class="s3">if </span><span class="s4">(</span><span class="s1">time_to_coin_counter </span><span class="s4">/ </span><span class="s5">60 </span><span class="s4">&gt; </span><span class="s5">1</span><span class="s4">) {</span>
+                <span class="s1">increment_player_score</span><span class="s4">();</span>
+                <span class="s1">time_to_coin_counter </span><span class="s4">= </span><span class="s5">0</span><span class="s4">;</span>
+            <span class="s4">}</span>
+        <span class="s4">}</span>
+        <span class="s3">else </span><span class="s4">{</span>
+            <span class="s6">// Allow the player to exit after the level timer goes to zero</span>
+            <span class="s1">LevelManager::get_instance</span><span class="s4">().</span><span class="s1">load_level</span><span class="s4">(</span><span class="s5">1</span><span class="s4">);</span>
+            <span class="s1">PlaySound</span><span class="s4">(</span><span class="s1">exit_sound</span><span class="s4">);</span>
+        <span class="s4">}</span>
+    <span class="s4">}</span>
+    <span class="s3">else </span><span class="s4">{</span>
+        <span class="s6">// Decrement the level timer if not at an exit</span>
+        <span class="s3">if </span><span class="s4">(</span><span class="s1">timer </span><span class="s4">&gt;= </span><span class="s5">0</span><span class="s4">) </span><span class="s1">timer</span><span class="s4">--;</span>
+    <span class="s4">}</span>
+
+    <span class="s6">// Kill the player if they touch a spike or fall below the level</span>
+    <span class="s3">if </span><span class="s4">(</span><span class="s1">LevelManager::get_instance</span><span class="s4">().</span>
+
+    <span class="s1">is_colliding</span><span class="s4">(</span><span class="s1">player</span><span class="s4">.</span><span class="s1">get_player_pos</span><span class="s4">(), </span><span class="s1">SPIKE</span><span class="s4">) || </span><span class="s1">player</span><span class="s4">.</span><span class="s1">get_player_pos</span><span class="s4">().</span><span class="s1">y </span><span class="s4">&gt; </span><span class="s1">current_level</span><span class="s4">.</span><span class="s1">get_rows</span><span class="s4">()) {</span>
+        <span class="s1">kill_player</span><span class="s4">();</span>
+    <span class="s4">}</span>
+
+    <span class="s6">// Upon colliding with an enemy...</span>
+    <span class="s3">if </span><span class="s4">(</span><span class="s1">EnemiesController::get_instance</span><span class="s4">().</span><span class="s1">is_colliding_with_enemies</span><span class="s4">(</span><span class="s1">player</span><span class="s4">.</span><span class="s1">get_player_pos</span><span class="s4">())) {</span>
+        <span class="s6">// ...check if their velocity is downwards...</span>
+        <span class="s3">if </span><span class="s4">(</span><span class="s1">player</span><span class="s4">.</span><span class="s1">get_player_y_velocity</span><span class="s4">() &gt; </span><span class="s5">0</span><span class="s4">) {</span>
+            <span class="s6">// ...if yes, award the player and kill the enemy</span>
+            <span class="s1">EnemiesController::get_instance</span><span class="s4">().</span><span class="s1">remove_colliding_enemy</span><span class="s4">(</span><span class="s1">player</span><span class="s4">.</span><span class="s1">get_player_pos</span><span class="s4">());</span>
+            <span class="s1">PlaySound</span><span class="s4">(</span><span class="s1">kill_enemy_sound</span><span class="s4">);</span>
+
+            <span class="s1">increment_player_score</span><span class="s4">();</span>
+            <span class="s1">player</span><span class="s4">.</span><span class="s1">set_player_y_velocity</span><span class="s4">(-</span><span class="s1">BOUNCE_OFF_ENEMY</span><span class="s4">);</span>
+        <span class="s4">}</span>
+        <span class="s3">else </span><span class="s4">{</span>
+            <span class="s6">// ...if not, kill the player</span>
+            <span class="s1">kill_player</span><span class="s4">();</span>
+        <span class="s4">}</span>
+    <span class="s4">}</span>
+<span class="s4">}</span></pre>
+</body>
+</html>

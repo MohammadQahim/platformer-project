@@ -20,7 +20,7 @@ public:
 
     void reset_player_stats();
     void increment_player_score();
-    int get_total_player_score() const;
+    int  get_total_player_score() const;
     void spawn_player();
     void kill_player();
     void move_player_horizontally(float delta);

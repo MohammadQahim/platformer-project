@@ -1,0 +1,197 @@
+<html>
+<head>
+<title>Readme.md</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #bcbec4;}
+.s1 { color: #bcbec4;}
+.s2 { color: #56a8f5;}
+.s3 { color: #cf8e6d;}
+.s4 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Readme.md</font>
+</center></td></tr></table>
+<pre><span class="s0">&lt;h1 align=center&gt; COM-119 2025S Project 1: platformer-project &lt;/h1&gt;</span>
+<span class="s0">&lt;h5 align=center&gt;This is the starting point for Project 1 of the Object-Oriented Programming course at AUCA, which students are required to translate into OOP &lt;/h5&gt;</span>
+
+<span class="s0">![</span><span class="s1">Preview</span><span class="s0">](</span><span class="s2">https://i.imgur.com/2AscgVH.png</span><span class="s0">)</span>
+
+<span class="s1">The primary goal of this project is to refactor and enhance a generic </span><span class="s0">[</span><span class="s1">Platformer</span><span class="s0">](</span><span class="s2">https://en.wikipedia.org/wiki/Platformer</span><span class="s0">) </span><span class="s1">game, originally written in a procedural programming style in C++, into an object-oriented design utilizing C++. This transformation should focus on encapsulating game functionalities into classes and objects, specifically targeting game levels, the player character, and the enemy characters code. Additionally, the project involves altering the level loading mechanism to dynamically parse level designs from `.rll` files, which utilize a specific run-length encoding format for level representation. A detailed description of the `.rll` file format can be found </span><span class="s0">[</span><span class="s1">below</span><span class="s0">](</span><span class="s1">#run-length-encoding</span><span class="s0">)</span><span class="s1">.</span>
+
+<span class="s0">![</span><span class="s1">Platformer</span><span class="s0">](</span><span class="s2">https://i.imgur.com/uuK9ubI.png</span><span class="s0">)</span>
+
+<span class="s1">This project aims to strengthen understanding of object-oriented programming </span><span class="s0">(</span><span class="s1">OOP</span><span class="s0">) </span><span class="s1">concepts such as encapsulation and data abstraction. It also introduces practical applications of exception handling for robust error management dealing with file input and output. It can also serve as testing grounds for concepts such as inheritance and polymorphism.</span>
+
+<span class="s1">To get started, clone the repository to get the starter code. You are encouraged to modify and refactor it as needed to meet the project requirements.</span>
+
+<span class="s1">Be inventive in applying OOP principles to redesign the game, ensuring to implement the following critical modifications</span><span class="s0">:</span>
+
+<span class="s3">## </span><span class="s1">Project Requirements</span>
+
+<span class="s3">### </span><span class="s1">Refactoring to Object-Oriented Design</span><span class="s0">:</span>
+
+<span class="s3">- </span><span class="s0">**</span><span class="s1">Level Class</span><span class="s0">**: </span><span class="s1">Convert the game level variables and related functions into a `level` class. This class should manage all aspects related to game levels, including storing level layout, and managing level state.</span>
+
+<span class="s3">- </span><span class="s0">**</span><span class="s1">Player Class</span><span class="s0">**: </span><span class="s1">Transform player-related variables and functions into a `player` class. This class should encapsulate all player-related functionalities, such as movement, interaction with the game world, and player state management.</span>
+
+<span class="s3">- </span><span class="s0">**</span><span class="s1">Enemy Class</span><span class="s0">**: </span><span class="s1">Similar to the `player` class, transform enemy-related variables and functions into an `enemy` class. This class should encapsulate all enemy-related functionalities, such as movement and interaction with the game world.</span>
+
+<span class="s3">### </span><span class="s1">Dynamic Level Loading</span><span class="s0">:</span>
+
+<span class="s3">- </span><span class="s1">Implement functionality to parse and load levels from the `levels.rll` file located in the `data` directory. This file contains level designs encoded using a specific </span><span class="s0">[</span><span class="s1">run-length encoding scheme</span><span class="s0">](</span><span class="s1">#run-length-encoding</span><span class="s0">)</span><span class="s1">. Your implementation must accurately parse these files, correctly interpret the run-length encoding, and construct playable levels from the data.</span>
+
+<span class="s3">- </span><span class="s1">Integrate robust error handling using exceptions to manage potential parsing and file-reading errors gracefully. This approach should ensure the game remains stable and provides informative feedback in the event of encountered errors.</span>
+
+<span class="s3">## </span><span class="s1">Additional Requirements</span><span class="s0">:</span>
+
+<span class="s3">- </span><span class="s0">**</span><span class="s1">Code Organization</span><span class="s0">**: </span><span class="s1">Maintain a clean and organized codebase. Structure your project into appropriate directories and files, ensuring a logical separation of classes, game assets, and other resources.</span>
+
+<span class="s3">- </span><span class="s0">**</span><span class="s1">Readme.md</span><span class="s0">**: </span><span class="s1">Create a `Game.md` file detailing your implementation, including a description of how you approached the refactoring process, any challenges faced, and how you overcame them. Also, document the steps required to set up and run your version of the game.</span>
+
+<span class="s3">- </span><span class="s0">**</span><span class="s1">Commit History</span><span class="s0">**: </span><span class="s1">Develop your project with a detailed commit history in a version control system. Regular commits with descriptive messages are essential to demonstrate the progression and milestones of your project work.</span>
+
+<span class="s0">![</span><span class="s1">Death screen</span><span class="s0">](</span><span class="s2">https://i.imgur.com/kCLXsJk.png</span><span class="s0">)</span>
+
+<span class="s3">## </span><span class="s1">Deliverables</span>
+
+<span class="s3">* </span><span class="s1">Develop the game within the `</span><span class="s0">&lt;repository&gt;</span><span class="s1">` directory. This directory should include a `data` subdirectory containing all game assets </span><span class="s0">(</span><span class="s1">images, fonts, sounds, etc.</span><span class="s0">)</span><span class="s1">. Additionally, ensure the `</span><span class="s0">&lt;repository&gt;</span><span class="s1">` directory contains a `Game.md` file detailing your game and listing the implemented features.</span>
+
+<span class="s3">* </span><span class="s1">Organize your code into a set of header files and classes. Each header file should contain related function definitions. Please, add forward declarations for functions </span><span class="s0">__</span><span class="s1">that are outside of classes</span><span class="s0">__ </span><span class="s1">in `globals.h` to prevent circular dependencies. If a function from a class is necessary, include its header file.</span>
+
+<span class="s3">* </span><span class="s1">Place your main game loop in the `platformer.cpp` file, which should include `globals.h` and all other necessary header files.</span>
+
+<span class="s1">Upon completion, your Project directory should have an organized structure similar to the following example</span><span class="s0">:</span>
+
+<span class="s3">```</span>
+<span class="s4">.</span>
+<span class="s4">└── &lt;repository&gt;</span>
+    <span class="s4">├── data</span>
+    <span class="s4">│   ├── fonts</span>
+    <span class="s4">│   │   └── ...</span>
+    <span class="s4">│   ├── images</span>
+    <span class="s4">│   │   └── ...</span>
+    <span class="s4">│   ├── music</span>
+    <span class="s4">│   │   └── ...</span>
+    <span class="s4">│   └── sounds</span>
+    <span class="s4">│       └── ...</span>
+    <span class="s4">├── platformer.cpp</span>
+    <span class="s4">├── globals.h</span>
+    <span class="s4">├── level.h</span>
+    <span class="s4">├── level.cpp</span>
+    <span class="s4">├── player.h</span>
+    <span class="s4">├── player.cpp</span>
+    <span class="s4">├── enemy.h</span>
+    <span class="s4">├── enemy.cpp</span>
+    <span class="s4">├── &lt;various header files&gt;.h</span>
+    <span class="s4">├── ... (.idea, .gitignore, CMakeLists.txt, other directories)</span>
+    <span class="s4">└── Readme.md</span>
+<span class="s3">```</span>
+
+<span class="s1">Commit and push your work at regular intervals, such as daily or after significant changes. Finally, submit the URL of the last commit to Moodle before the deadline.</span>
+
+<span class="s3">## </span><span class="s1">Project Setup Notes</span>
+
+<span class="s1">Set up the raylib project as you have done in previous labs for graphics assignments.</span>
+
+<span class="s1">Before attempting to run the code for the `platformer` target, please ensure that you set the `Working directory` correctly in your CLion IDE.</span>
+
+<span class="s1">The current working directory must point to the directory containing the necessary resource files </span><span class="s0">(</span><span class="s1">e.g., `data/images`, `data/fonts`, and `data/sound|music`</span><span class="s0">)</span><span class="s1">. Failure to do so will result in these resources not being loaded properly, and you will not see or hear the intended visuals or sounds in the game.</span>
+
+<span class="s1">To set the working directory</span><span class="s0">:</span>
+
+<span class="s3">1. </span><span class="s1">Open the `Run` menu and find the `Edit configurations` button there in CLion.</span>
+<span class="s3">2. </span><span class="s1">Select the `platformer` target.</span>
+<span class="s3">3. </span><span class="s1">Locate the `Working directory` field.</span>
+<span class="s3">4. </span><span class="s1">Set it to the `$ProjectFileDir$` value </span><span class="s0">(</span><span class="s1">this ensures it points to the root project directory with the `data` folder</span><span class="s0">)</span><span class="s1">.</span>
+<span class="s3">5. </span><span class="s1">Save your configuration and run the target again.</span>
+
+<span class="s1">If you encounter any issues, double-check that the paths to the resource files are correct relative to the working directory.</span>
+
+<span class="s3">## </span><span class="s1">Deadline</span>
+
+<span class="s1">Refer to the specific course or assignment page on Moodle for detailed information about deadlines.</span>
+
+<span class="s0">&lt;h1 align=&quot;center&quot;&gt; Attachments &lt;/h1&gt;</span>
+
+<span class="s3">## </span><span class="s1">Prerequisites</span>
+
+<span class="s1">To successfully complete this project, students are encouraged to familiarize themselves with the following theoretical ground</span><span class="s0">:</span>
+
+<span class="s3">- </span><span class="s1">Liang, Daniel Y. </span><span class="s0">_</span><span class="s1">Introduction to Programming with C++</span><span class="s0">_</span><span class="s1">. Pearson, 2014, Chapters 9, 10, 11, and 13 </span><span class="s0">(</span><span class="s1">pp. 361-542</span><span class="s0">)</span><span class="s1">;</span>
+<span class="s3">- </span><span class="s0">[</span><span class="s1">Singleton</span><span class="s0">](</span><span class="s2">https://refactoring.guru/design-patterns/singleton</span><span class="s0">)</span><span class="s1">, </span><span class="s0">[</span><span class="s1">Factory</span><span class="s0">](</span><span class="s2">https://refactoring.guru/design-patterns/factory-method</span><span class="s0">)</span><span class="s1">, and </span><span class="s0">[</span><span class="s1">Mediator</span><span class="s0">](</span><span class="s2">https://refactoring.guru/design-patterns/mediator</span><span class="s0">)</span><span class="s1">/</span><span class="s0">[</span><span class="s1">Observer</span><span class="s0">](</span><span class="s2">https://refactoring.guru/design-patterns/observer</span><span class="s0">) </span><span class="s1">design patterns.</span>
+
+<span class="s1">Doing so will simplify and ease the process of redesigning procedural code into object-oriented code.</span>
+
+<span class="s3">## </span><span class="s1">Run-Length Encoding</span>
+
+<span class="s1">This project utilizes RLE to encode levels, increasing compactness and efficiency. Level elements are represented by the following elements</span><span class="s0">:</span>
+
+<span class="s3">| </span><span class="s0">Puzzle Element </span><span class="s3">| </span><span class="s0">Character </span><span class="s3">| </span><span class="s0">ASCII code </span><span class="s3">|</span>
+<span class="s3">|:---------------|:----------|:-----------|</span>
+<span class="s3">| </span><span class="s0">Wall           </span><span class="s3">| </span><span class="s0">#         </span><span class="s3">| </span><span class="s0">0x23       </span><span class="s3">|</span>
+<span class="s3">| </span><span class="s0">Dark Wall      </span><span class="s3">| </span><span class="s0">=         </span><span class="s3">| </span><span class="s0">0x3D       </span><span class="s3">|</span>
+<span class="s3">| </span><span class="s0">Air            </span><span class="s3">| </span><span class="s0">-         </span><span class="s3">| </span><span class="s0">0x2D       </span><span class="s3">|</span>
+<span class="s3">| </span><span class="s0">Player         </span><span class="s3">| </span><span class="s0">@         </span><span class="s3">| </span><span class="s0">0x40       </span><span class="s3">|</span>
+<span class="s3">| </span><span class="s0">Coin           </span><span class="s3">| </span><span class="s0">*         </span><span class="s3">| </span><span class="s0">0x2A       </span><span class="s3">|</span>
+<span class="s3">| </span><span class="s0">Spike          </span><span class="s3">| </span><span class="s0">^         </span><span class="s3">| </span><span class="s0">0x5E       </span><span class="s3">|</span>
+<span class="s3">| </span><span class="s0">Enemy          </span><span class="s3">| </span><span class="s0">&amp;         </span><span class="s3">| </span><span class="s0">0x26       </span><span class="s3">|</span>
+
+<span class="s1">In the RLE format, digits are used to show how many elements of the same type are following; as such</span><span class="s0">:</span>
+
+<span class="s1">`---- becomes 4-`.</span>
+
+<span class="s1">So the following level,</span>
+<span class="s3">```</span>
+ <span class="s4">-------</span>
+ <span class="s4">---*---</span>
+ <span class="s4">-------</span>
+ <span class="s4">-------</span>
+ <span class="s4">-------</span>
+ <span class="s4">@-^^^-E</span>
+ <span class="s4">#######</span>
+<span class="s3">```</span>
+
+<span class="s1">looks like this with RLE</span><span class="s0">:</span>
+
+<span class="s1">`7-|3-</span><span class="s0">*</span><span class="s1">3-|7-|7-|7-|@-3^-E|7#`.</span>
+
+<span class="s1">The rows of the level are separated by vertical bars </span><span class="s0">(</span><span class="s1">`|`s</span><span class="s0">)</span><span class="s1">.</span>
+
+<span class="s3">## </span><span class="s1">Implementation Tips</span>
+
+<span class="s3">- </span><span class="s1">In your `class.h` files, exclusively use forward declarations—do not implement functions. Furthermore, try to only include `</span><span class="s0">&quot;</span><span class="s1">raylib.h</span><span class="s0">&quot;</span><span class="s1">` in your `.h` files </span><span class="s0">(</span><span class="s1">wherever possible</span><span class="s0">)</span><span class="s1">.</span>
+<span class="s3">- </span><span class="s1">In your `class.cpp` files, however, you may include anything that is necessary.</span>
+<span class="s3">- </span><span class="s1">Use the `inline` keyword on variables that are included in more than one `.cpp` file, like `globals.h`, to avoid variable redefinitions.</span>
+<span class="s3">- </span><span class="s1">Do not forget to initialize static member variables, especially singletons.</span>
+<span class="s3">- </span><span class="s1">Use compilation and linking errors to your advantage</span><span class="s0">: _</span><span class="s1">read</span><span class="s0">_ </span><span class="s1">them.</span>
+<span class="s3">- </span><span class="s1">Use the debug tool to resolve crashes.</span>
+
+<span class="s3">## </span><span class="s1">Links</span>
+
+<span class="s3">### </span><span class="s1">raylib</span>
+
+<span class="s3">* </span><span class="s0">[</span><span class="s1">Wiki</span><span class="s0">](</span><span class="s2">https://github.com/raysan5/raylib/wiki</span><span class="s0">)</span>
+<span class="s3">* </span><span class="s0">[</span><span class="s1">Cheatsheet</span><span class="s0">](</span><span class="s2">https://www.raylib.com/cheatsheet/cheatsheet.html</span><span class="s0">)</span>
+<span class="s3">* </span><span class="s0">[</span><span class="s1">Examples</span><span class="s0">](</span><span class="s2">https://www.raylib.com/examples.html</span><span class="s0">)</span>
+
+<span class="s3">### </span><span class="s1">Tools</span>
+
+<span class="s3">* </span><span class="s0">[</span><span class="s1">aseprite</span><span class="s0">](</span><span class="s2">https://github.com/aseprite/aseprite</span><span class="s0">) </span><span class="s1">/ </span><span class="s0">[</span><span class="s1">krita</span><span class="s0">](</span><span class="s2">https://krita.org/en/</span><span class="s0">)</span>
+<span class="s3">* </span><span class="s0">[</span><span class="s1">jsfxr</span><span class="s0">](</span><span class="s2">https://sfxr.me/</span><span class="s0">)</span>
+
+<span class="s3">## </span><span class="s1">Books</span>
+
+<span class="s3">* </span><span class="s1">Introduction to Programming with C++, 3rd Edition by Daniel Liang</span>
+
+<span class="s3">## </span><span class="s1">Credits</span>
+
+<span class="s3">* </span><span class="s0">[</span><span class="s1">Luna Maltseva</span><span class="s0">](</span><span class="s2">https://github.com/lunamaltseva</span><span class="s0">)</span>
+
+</pre>
+</body>
+</html>

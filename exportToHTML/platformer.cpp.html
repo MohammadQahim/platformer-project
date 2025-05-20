@@ -1,0 +1,174 @@
+<html>
+<head>
+<title>platformer.cpp</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #b3ae60;}
+.s1 { color: #bcbec4;}
+.s2 { color: #6aab73;}
+.s3 { color: #cf8e6d;}
+.s4 { color: #bcbec4;}
+.s5 { color: #2aacb8;}
+.s6 { color: #7a7e85;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+platformer.cpp</font>
+</center></td></tr></table>
+<pre><span class="s0">#include </span><span class="s2">&quot;raylib.h&quot;</span>
+
+<span class="s0">#include </span><span class="s2">&quot;globals.h&quot;</span>
+<span class="s0">#include </span><span class="s2">&quot;level.h&quot;</span>
+<span class="s0">#include </span><span class="s2">&quot;player.h&quot;</span>
+<span class="s0">#include </span><span class="s2">&quot;enemy.h&quot;</span>
+<span class="s0">#include </span><span class="s2">&quot;graphics.h&quot;</span>
+<span class="s0">#include </span><span class="s2">&quot;assets.h&quot;</span>
+<span class="s0">#include </span><span class="s2">&quot;utilities.h&quot;</span>
+
+<span class="s3">void </span><span class="s1">update_game</span><span class="s4">() {</span>
+    <span class="s1">game_frame</span><span class="s4">++;</span>
+
+    <span class="s3">switch </span><span class="s4">(</span><span class="s1">game_state</span><span class="s4">) {</span>
+        <span class="s3">case </span><span class="s1">MENU_STATE:</span>
+            <span class="s3">if </span><span class="s4">(</span><span class="s1">IsKeyPressed</span><span class="s4">(</span><span class="s1">KEY_ENTER</span><span class="s4">)) {</span>
+                <span class="s1">SetExitKey</span><span class="s4">(</span><span class="s5">0</span><span class="s4">);</span>
+                <span class="s1">game_state </span><span class="s4">= </span><span class="s1">GAME_STATE</span><span class="s4">;</span>
+                <span class="s1">LevelManager::get_instance</span><span class="s4">().</span><span class="s1">load_level</span><span class="s4">(</span><span class="s5">0</span><span class="s4">);</span>
+            <span class="s4">}</span>
+            <span class="s3">break</span><span class="s4">;</span>
+
+        <span class="s3">case </span><span class="s1">GAME_STATE:</span>
+            <span class="s3">if </span><span class="s4">(</span><span class="s1">IsKeyDown</span><span class="s4">(</span><span class="s1">KEY_RIGHT</span><span class="s4">) || </span><span class="s1">IsKeyDown</span><span class="s4">(</span><span class="s1">KEY_D</span><span class="s4">)) {</span>
+                <span class="s1">PlayerController::get_instance</span><span class="s4">().</span><span class="s1">move_player_horizontally</span><span class="s4">(</span><span class="s1">PLAYER_MOVEMENT_SPEED</span><span class="s4">);</span>
+            <span class="s4">}</span>
+
+            <span class="s3">if </span><span class="s4">(</span><span class="s1">IsKeyDown</span><span class="s4">(</span><span class="s1">KEY_LEFT</span><span class="s4">) || </span><span class="s1">IsKeyDown</span><span class="s4">(</span><span class="s1">KEY_A</span><span class="s4">)) {</span>
+                <span class="s1">PlayerController::get_instance</span><span class="s4">().</span><span class="s1">move_player_horizontally</span><span class="s4">(-</span><span class="s1">PLAYER_MOVEMENT_SPEED</span><span class="s4">);</span>
+            <span class="s4">}</span>
+
+            <span class="s6">// Calculating collisions to decide whether the player is allowed to jump</span>
+            <span class="s1">PlayerController::get_instance</span><span class="s4">().</span><span class="s1">player1</span><span class="s4">().</span><span class="s1">set_player_on_ground</span><span class="s4">(</span><span class="s1">LevelManager::get_instance</span><span class="s4">().</span><span class="s1">is_colliding</span><span class="s4">({</span><span class="s1">PlayerController::get_instance</span><span class="s4">().</span><span class="s1">player1</span><span class="s4">().</span><span class="s1">get_player_pos</span><span class="s4">().</span><span class="s1">x</span><span class="s4">, </span><span class="s1">PlayerController::get_instance</span><span class="s4">().</span><span class="s1">player1</span><span class="s4">().</span><span class="s1">get_player_pos</span><span class="s4">().</span><span class="s1">y </span><span class="s4">+ </span><span class="s5">0.1f</span><span class="s4">}, </span><span class="s1">WALL</span><span class="s4">));</span>
+            <span class="s3">if </span><span class="s4">((</span><span class="s1">IsKeyDown</span><span class="s4">(</span><span class="s1">KEY_UP</span><span class="s4">) || </span><span class="s1">IsKeyDown</span><span class="s4">(</span><span class="s1">KEY_W</span><span class="s4">) || </span><span class="s1">IsKeyDown</span><span class="s4">(</span><span class="s1">KEY_SPACE</span><span class="s4">)) &amp;&amp; </span><span class="s1">PlayerController::get_instance</span><span class="s4">().</span><span class="s1">player1</span><span class="s4">().</span><span class="s1">is_player_on_ground</span><span class="s4">()) {</span>
+                <span class="s1">PlayerController::get_instance</span><span class="s4">().</span><span class="s1">player1</span><span class="s4">().</span><span class="s1">set_player_y_velocity</span><span class="s4">(-</span><span class="s1">JUMP_STRENGTH</span><span class="s4">);</span>
+            <span class="s4">}</span>
+
+            <span class="s1">PlayerController::get_instance</span><span class="s4">().</span><span class="s1">update_player</span><span class="s4">();</span>
+            <span class="s1">EnemiesController::get_instance</span><span class="s4">().</span><span class="s1">update_enemies</span><span class="s4">();</span>
+
+            <span class="s3">if </span><span class="s4">(</span><span class="s1">IsKeyPressed</span><span class="s4">(</span><span class="s1">KEY_ESCAPE</span><span class="s4">)) {</span>
+                <span class="s1">game_state </span><span class="s4">= </span><span class="s1">PAUSED_STATE</span><span class="s4">;</span>
+            <span class="s4">}</span>
+            <span class="s3">break</span><span class="s4">;</span>
+
+        <span class="s3">case </span><span class="s1">PAUSED_STATE:</span>
+            <span class="s3">if </span><span class="s4">(</span><span class="s1">IsKeyPressed</span><span class="s4">(</span><span class="s1">KEY_ESCAPE</span><span class="s4">)) {</span>
+                <span class="s1">game_state </span><span class="s4">= </span><span class="s1">GAME_STATE</span><span class="s4">;</span>
+            <span class="s4">}</span>
+            <span class="s3">break</span><span class="s4">;</span>
+
+        <span class="s3">case </span><span class="s1">DEATH_STATE:</span>
+            <span class="s1">PlayerController::get_instance</span><span class="s4">().</span><span class="s1">update_player_gravity</span><span class="s4">();</span>
+
+            <span class="s3">if </span><span class="s4">(</span><span class="s1">IsKeyPressed</span><span class="s4">(</span><span class="s1">KEY_ENTER</span><span class="s4">)) {</span>
+                <span class="s3">if </span><span class="s4">(</span><span class="s1">PlayerController::get_instance</span><span class="s4">().</span><span class="s1">player_lives </span><span class="s4">&gt; </span><span class="s5">0</span><span class="s4">) {</span>
+                    <span class="s1">LevelManager::get_instance</span><span class="s4">().</span><span class="s1">load_level</span><span class="s4">(</span><span class="s5">0</span><span class="s4">);</span>
+                    <span class="s1">game_state </span><span class="s4">= </span><span class="s1">GAME_STATE</span><span class="s4">;</span>
+                <span class="s4">}</span>
+                <span class="s3">else </span><span class="s4">{</span>
+                    <span class="s1">game_state </span><span class="s4">= </span><span class="s1">GAME_OVER_STATE</span><span class="s4">;</span>
+                    <span class="s1">PlaySound</span><span class="s4">(</span><span class="s1">game_over_sound</span><span class="s4">);</span>
+                <span class="s4">}</span>
+            <span class="s4">}</span>
+            <span class="s3">break</span><span class="s4">;</span>
+
+        <span class="s3">case </span><span class="s1">GAME_OVER_STATE:</span>
+            <span class="s3">if </span><span class="s4">(</span><span class="s1">IsKeyPressed</span><span class="s4">(</span><span class="s1">KEY_ENTER</span><span class="s4">)) {</span>
+                <span class="s1">LevelManager::get_instance</span><span class="s4">().</span><span class="s1">reset_level_index</span><span class="s4">();</span>
+                <span class="s1">PlayerController::get_instance</span><span class="s4">().</span><span class="s1">reset_player_stats</span><span class="s4">();</span>
+                <span class="s1">game_state </span><span class="s4">= </span><span class="s1">GAME_STATE</span><span class="s4">;</span>
+                <span class="s1">LevelManager::get_instance</span><span class="s4">().</span><span class="s1">load_level</span><span class="s4">(</span><span class="s5">0</span><span class="s4">);</span>
+            <span class="s4">}</span>
+            <span class="s3">break</span><span class="s4">;</span>
+
+        <span class="s3">case </span><span class="s1">VICTORY_STATE:</span>
+            <span class="s3">if </span><span class="s4">(</span><span class="s1">IsKeyPressed</span><span class="s4">(</span><span class="s1">KEY_ENTER</span><span class="s4">) || </span><span class="s1">IsKeyPressed</span><span class="s4">(</span><span class="s1">KEY_ESCAPE</span><span class="s4">)) {</span>
+                <span class="s1">LevelManager::get_instance</span><span class="s4">().</span><span class="s1">reset_level_index</span><span class="s4">();</span>
+                <span class="s1">PlayerController::get_instance</span><span class="s4">().</span><span class="s1">reset_player_stats</span><span class="s4">();</span>
+                <span class="s1">game_state </span><span class="s4">= </span><span class="s1">MENU_STATE</span><span class="s4">;</span>
+                <span class="s1">SetExitKey</span><span class="s4">(</span><span class="s1">KEY_ESCAPE</span><span class="s4">);</span>
+            <span class="s4">}</span>
+            <span class="s3">break</span><span class="s4">;</span>
+    <span class="s4">}</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">draw_game</span><span class="s4">() {</span>
+    <span class="s3">switch</span><span class="s4">(</span><span class="s1">game_state</span><span class="s4">) {</span>
+        <span class="s3">case </span><span class="s1">MENU_STATE:</span>
+            <span class="s1">ClearBackground</span><span class="s4">(</span><span class="s1">BLACK</span><span class="s4">);</span>
+            <span class="s1">draw_menu</span><span class="s4">();</span>
+            <span class="s3">break</span><span class="s4">;</span>
+
+        <span class="s3">case </span><span class="s1">GAME_STATE:</span>
+            <span class="s1">ClearBackground</span><span class="s4">(</span><span class="s1">BLACK</span><span class="s4">);</span>
+            <span class="s1">draw_parallax_background</span><span class="s4">();</span>
+            <span class="s1">draw_level</span><span class="s4">();</span>
+            <span class="s1">draw_game_overlay</span><span class="s4">();</span>
+            <span class="s3">break</span><span class="s4">;</span>
+
+        <span class="s3">case </span><span class="s1">DEATH_STATE:</span>
+            <span class="s1">ClearBackground</span><span class="s4">(</span><span class="s1">BLACK</span><span class="s4">);</span>
+            <span class="s1">draw_death_screen</span><span class="s4">();</span>
+            <span class="s3">break</span><span class="s4">;</span>
+
+        <span class="s3">case </span><span class="s1">GAME_OVER_STATE:</span>
+            <span class="s1">ClearBackground</span><span class="s4">(</span><span class="s1">BLACK</span><span class="s4">);</span>
+            <span class="s1">draw_game_over_menu</span><span class="s4">();</span>
+            <span class="s3">break</span><span class="s4">;</span>
+
+        <span class="s3">case </span><span class="s1">PAUSED_STATE:</span>
+            <span class="s1">ClearBackground</span><span class="s4">(</span><span class="s1">BLACK</span><span class="s4">);</span>
+            <span class="s1">draw_pause_menu</span><span class="s4">();</span>
+            <span class="s3">break</span><span class="s4">;</span>
+
+        <span class="s3">case </span><span class="s1">VICTORY_STATE:</span>
+            <span class="s1">draw_victory_menu</span><span class="s4">();</span>
+            <span class="s3">break</span><span class="s4">;</span>
+    <span class="s4">}</span>
+<span class="s4">}</span>
+
+<span class="s3">int </span><span class="s1">main</span><span class="s4">() {</span>
+    <span class="s1">SetConfigFlags</span><span class="s4">(</span><span class="s1">FLAG_VSYNC_HINT</span><span class="s4">);</span>
+    <span class="s1">InitWindow</span><span class="s4">(</span><span class="s5">1024</span><span class="s4">, </span><span class="s5">480</span><span class="s4">, </span><span class="s2">&quot;Platformer&quot;</span><span class="s4">);</span>
+    <span class="s1">SetTargetFPS</span><span class="s4">(</span><span class="s5">60</span><span class="s4">);</span>
+    <span class="s1">HideCursor</span><span class="s4">();</span>
+
+    <span class="s1">load_fonts</span><span class="s4">();</span>
+    <span class="s1">load_images</span><span class="s4">();</span>
+    <span class="s1">load_sounds</span><span class="s4">();</span>
+    <span class="s1">LevelManager::get_instance</span><span class="s4">().</span><span class="s1">load_level</span><span class="s4">(</span><span class="s5">0</span><span class="s4">);</span>
+
+    <span class="s3">while </span><span class="s4">(!</span><span class="s1">WindowShouldClose</span><span class="s4">()) {</span>
+        <span class="s1">BeginDrawing</span><span class="s4">();</span>
+
+        <span class="s1">update_game</span><span class="s4">();</span>
+        <span class="s1">draw_game</span><span class="s4">();</span>
+
+        <span class="s1">EndDrawing</span><span class="s4">();</span>
+    <span class="s4">}</span>
+
+    <span class="s1">LevelManager::get_instance</span><span class="s4">().</span><span class="s1">unload_level</span><span class="s4">();</span>
+    <span class="s1">unload_sounds</span><span class="s4">();</span>
+    <span class="s1">unload_images</span><span class="s4">();</span>
+    <span class="s1">unload_fonts</span><span class="s4">();</span>
+
+    <span class="s1">CloseAudioDevice</span><span class="s4">();</span>
+    <span class="s1">CloseWindow</span><span class="s4">();</span>
+
+    <span class="s3">return </span><span class="s5">0</span><span class="s4">;</span>
+<span class="s4">}</span>
+</pre>
+</body>
+</html>

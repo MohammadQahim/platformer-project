@@ -14,6 +14,7 @@ void draw_text(Text &text) {
         (screen_size.y * text.position.y) - (0.5f * dimensions.y)
     };
 
+
     DrawTextEx(*text.font, text.str.c_str(), pos, dimensions.y, text.spacing, text.color);
 }
 
@@ -21,8 +22,9 @@ void derive_graphics_metrics_from_loaded_level() {
     // Level and UI setup
     screen_size.x  = static_cast<float>(GetScreenWidth());
     screen_size.y = static_cast<float>(GetScreenHeight());
+    const Level& current_level = LevelManager::get_instance().get_current_level();
 
-    cell_size = screen_size.y / static_cast<float>(LEVELS[level_index].get_rows());
+    cell_size = screen_size.y / static_cast<float>(current_level.get_rows());
     screen_scale = std::min(screen_size.x, screen_size.y) / SCREEN_SCALE_DIVISOR;
 
     // Parallax background setup
@@ -97,8 +99,8 @@ void draw_level() {
     // Move the x-axis' center to the middle of the screen
     horizontal_shift = (screen_size.x - cell_size) / 2;
 
-    for (size_t row = 0; row < current_level.get_rows(); ++row) {
-        for (size_t column = 0; column < current_level.get_columns(); ++column) {
+    for (size_t row = 0; row < LevelManager::get_instance().get_current_level().get_rows(); ++row) {
+        for (size_t column = 0; column < LevelManager::get_instance().get_current_level().get_columns(); ++column) {
 
             Vector2 pos = {
                     // Move the level to the left as the player advances to the right,

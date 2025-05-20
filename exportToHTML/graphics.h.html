@@ -1,0 +1,285 @@
+<html>
+<head>
+<title>graphics.h</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #b3ae60;}
+.s1 { color: #bcbec4;}
+.s2 { color: #6aab73;}
+.s3 { color: #cf8e6d;}
+.s4 { color: #bcbec4;}
+.s5 { color: #7a7e85;}
+.s6 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+graphics.h</font>
+</center></td></tr></table>
+<pre><span class="s0">#ifndef </span><span class="s1">GRAPHICS_H</span>
+<span class="s0">#define </span><span class="s1">GRAPHICS_H</span>
+
+<span class="s0">#include </span><span class="s2">&quot;globals.h&quot;</span>
+<span class="s0">#include </span><span class="s2">&quot;player_controller.h&quot;</span>
+<span class="s0">#include </span><span class="s2">&quot;player.h&quot;</span>
+
+<span class="s3">void </span><span class="s1">draw_text</span><span class="s4">(</span><span class="s1">Text </span><span class="s4">&amp;</span><span class="s1">text</span><span class="s4">) {</span>
+    <span class="s5">// Measure the text, center it to the required position, and draw it</span>
+    <span class="s1">Vector2 dimensions </span><span class="s4">= </span><span class="s1">MeasureTextEx</span><span class="s4">(*</span><span class="s1">text</span><span class="s4">.</span><span class="s1">font</span><span class="s4">, </span><span class="s1">text</span><span class="s4">.</span><span class="s1">str</span><span class="s4">.</span><span class="s1">c_str</span><span class="s4">(), </span><span class="s1">text</span><span class="s4">.</span><span class="s1">size </span><span class="s4">* </span><span class="s1">screen_scale</span><span class="s4">, </span><span class="s1">text</span><span class="s4">.</span><span class="s1">spacing</span><span class="s4">);</span>
+
+    <span class="s1">Vector2 pos </span><span class="s4">= {</span>
+        <span class="s4">(</span><span class="s1">screen_size</span><span class="s4">.</span><span class="s1">x </span><span class="s4">* </span><span class="s1">text</span><span class="s4">.</span><span class="s1">position</span><span class="s4">.</span><span class="s1">x</span><span class="s4">) - (</span><span class="s6">0.5f </span><span class="s4">* </span><span class="s1">dimensions</span><span class="s4">.</span><span class="s1">x</span><span class="s4">),</span>
+        <span class="s4">(</span><span class="s1">screen_size</span><span class="s4">.</span><span class="s1">y </span><span class="s4">* </span><span class="s1">text</span><span class="s4">.</span><span class="s1">position</span><span class="s4">.</span><span class="s1">y</span><span class="s4">) - (</span><span class="s6">0.5f </span><span class="s4">* </span><span class="s1">dimensions</span><span class="s4">.</span><span class="s1">y</span><span class="s4">)</span>
+    <span class="s4">};</span>
+
+
+    <span class="s1">DrawTextEx</span><span class="s4">(*</span><span class="s1">text</span><span class="s4">.</span><span class="s1">font</span><span class="s4">, </span><span class="s1">text</span><span class="s4">.</span><span class="s1">str</span><span class="s4">.</span><span class="s1">c_str</span><span class="s4">(), </span><span class="s1">pos</span><span class="s4">, </span><span class="s1">dimensions</span><span class="s4">.</span><span class="s1">y</span><span class="s4">, </span><span class="s1">text</span><span class="s4">.</span><span class="s1">spacing</span><span class="s4">, </span><span class="s1">text</span><span class="s4">.</span><span class="s1">color</span><span class="s4">);</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">derive_graphics_metrics_from_loaded_level</span><span class="s4">() {</span>
+    <span class="s5">// Level and UI setup</span>
+    <span class="s1">screen_size</span><span class="s4">.</span><span class="s1">x  </span><span class="s4">= </span><span class="s3">static_cast</span><span class="s4">&lt;</span><span class="s3">float</span><span class="s4">&gt;(</span><span class="s1">GetScreenWidth</span><span class="s4">());</span>
+    <span class="s1">screen_size</span><span class="s4">.</span><span class="s1">y </span><span class="s4">= </span><span class="s3">static_cast</span><span class="s4">&lt;</span><span class="s3">float</span><span class="s4">&gt;(</span><span class="s1">GetScreenHeight</span><span class="s4">());</span>
+
+    <span class="s1">cell_size </span><span class="s4">= </span><span class="s1">screen_size</span><span class="s4">.</span><span class="s1">y </span><span class="s4">/ </span><span class="s3">static_cast</span><span class="s4">&lt;</span><span class="s3">float</span><span class="s4">&gt;(</span><span class="s1">LEVELS</span><span class="s4">[</span><span class="s1">level_index</span><span class="s4">].</span><span class="s1">get_rows</span><span class="s4">());</span>
+    <span class="s1">screen_scale </span><span class="s4">= </span><span class="s1">std::min</span><span class="s4">(</span><span class="s1">screen_size</span><span class="s4">.</span><span class="s1">x</span><span class="s4">, </span><span class="s1">screen_size</span><span class="s4">.</span><span class="s1">y</span><span class="s4">) / </span><span class="s1">SCREEN_SCALE_DIVISOR</span><span class="s4">;</span>
+
+    <span class="s5">// Parallax background setup</span>
+    <span class="s3">float </span><span class="s1">larger_screen_side </span><span class="s4">= </span><span class="s1">std::max</span><span class="s4">(</span><span class="s1">screen_size</span><span class="s4">.</span><span class="s1">x</span><span class="s4">, </span><span class="s1">screen_size</span><span class="s4">.</span><span class="s1">y</span><span class="s4">);</span>
+
+    <span class="s3">if </span><span class="s4">(</span><span class="s1">screen_size</span><span class="s4">.</span><span class="s1">x </span><span class="s4">&gt; </span><span class="s1">screen_size</span><span class="s4">.</span><span class="s1">y</span><span class="s4">) {</span>
+        <span class="s1">background_size </span><span class="s4">= {</span><span class="s1">larger_screen_side</span><span class="s4">, </span><span class="s1">larger_screen_side </span><span class="s4">/ </span><span class="s6">16 </span><span class="s4">* </span><span class="s6">10</span><span class="s4">};</span>
+    <span class="s4">}</span>
+    <span class="s3">else </span><span class="s4">{</span>
+        <span class="s1">background_size </span><span class="s4">= {</span><span class="s1">larger_screen_side </span><span class="s4">/ </span><span class="s6">10 </span><span class="s4">* </span><span class="s6">16</span><span class="s4">, </span><span class="s1">larger_screen_side</span><span class="s4">};</span>
+    <span class="s4">}</span>
+
+    <span class="s1">background_y_offset </span><span class="s4">= (</span><span class="s1">screen_size</span><span class="s4">.</span><span class="s1">y </span><span class="s4">- </span><span class="s1">background_size</span><span class="s4">.</span><span class="s1">y</span><span class="s4">) * </span><span class="s6">0.5f</span><span class="s4">;</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">draw_parallax_background</span><span class="s4">() {</span>
+    <span class="s5">// First uses the player's position</span>
+    <span class="s3">float </span><span class="s1">initial_offset      </span><span class="s4">= -(</span><span class="s1">PlayerController::get_instance</span><span class="s4">().</span><span class="s1">player1</span><span class="s4">().</span><span class="s1">get_player_pos</span><span class="s4">().</span><span class="s1">x </span><span class="s4">* </span><span class="s1">PARALLAX_PLAYER_SCROLLING_SPEED </span><span class="s4">+ </span><span class="s1">game_frame </span><span class="s4">* </span><span class="s1">PARALLAX_IDLE_SCROLLING_SPEED</span><span class="s4">);</span>
+
+    <span class="s5">// Calculate offsets for different layers</span>
+    <span class="s3">float </span><span class="s1">background_offset   </span><span class="s4">= </span><span class="s1">initial_offset</span><span class="s4">;</span>
+    <span class="s3">float </span><span class="s1">middleground_offset </span><span class="s4">= </span><span class="s1">background_offset </span><span class="s4">* </span><span class="s1">PARALLAX_LAYERED_SPEED_DIFFERENCE</span><span class="s4">;</span>
+    <span class="s3">float </span><span class="s1">foreground_offset   </span><span class="s4">= </span><span class="s1">middleground_offset </span><span class="s4">* </span><span class="s1">PARALLAX_LAYERED_SPEED_DIFFERENCE</span><span class="s4">;</span>
+
+    <span class="s5">// Wrap offsets to create a loop effect</span>
+    <span class="s1">background_offset   </span><span class="s4">= </span><span class="s1">fmod</span><span class="s4">(</span><span class="s1">background_offset</span><span class="s4">, </span><span class="s6">1.0f</span><span class="s4">);</span>
+    <span class="s1">middleground_offset </span><span class="s4">= </span><span class="s1">fmod</span><span class="s4">(</span><span class="s1">middleground_offset</span><span class="s4">, </span><span class="s6">1.0f</span><span class="s4">);</span>
+    <span class="s1">foreground_offset   </span><span class="s4">= </span><span class="s1">fmod</span><span class="s4">(</span><span class="s1">foreground_offset</span><span class="s4">, </span><span class="s6">1.0f</span><span class="s4">);</span>
+
+    <span class="s5">// Scale to background size</span>
+    <span class="s1">background_offset   </span><span class="s4">*= </span><span class="s1">background_size</span><span class="s4">.</span><span class="s1">x</span><span class="s4">;</span>
+    <span class="s1">middleground_offset </span><span class="s4">*= </span><span class="s1">background_size</span><span class="s4">.</span><span class="s1">x</span><span class="s4">;</span>
+    <span class="s1">foreground_offset   </span><span class="s4">*= </span><span class="s1">background_size</span><span class="s4">.</span><span class="s1">x</span><span class="s4">;</span>
+
+    <span class="s5">// Each layer is drawn twice, side by side, the first starting from its offset, and the other from its offset + background_size</span>
+    <span class="s5">// This ensures a seamless scrolling effect, because when one copy moves out of sight, the second jumps into its place.</span>
+    <span class="s1">draw_image</span><span class="s4">(</span><span class="s1">background</span><span class="s4">,   {</span><span class="s1">background_offset </span><span class="s4">+ </span><span class="s1">background_size</span><span class="s4">.</span><span class="s1">x</span><span class="s4">, </span><span class="s1">background_y_offset</span><span class="s4">},   </span><span class="s1">background_size</span><span class="s4">.</span><span class="s1">x</span><span class="s4">, </span><span class="s1">background_size</span><span class="s4">.</span><span class="s1">y</span><span class="s4">);</span>
+    <span class="s1">draw_image</span><span class="s4">(</span><span class="s1">background</span><span class="s4">,   {</span><span class="s1">background_offset</span><span class="s4">,                     </span><span class="s1">background_y_offset</span><span class="s4">},   </span><span class="s1">background_size</span><span class="s4">.</span><span class="s1">x</span><span class="s4">, </span><span class="s1">background_size</span><span class="s4">.</span><span class="s1">y</span><span class="s4">);</span>
+
+    <span class="s1">draw_image</span><span class="s4">(</span><span class="s1">middleground</span><span class="s4">, {</span><span class="s1">middleground_offset </span><span class="s4">+ </span><span class="s1">background_size</span><span class="s4">.</span><span class="s1">x</span><span class="s4">, </span><span class="s1">background_y_offset</span><span class="s4">}, </span><span class="s1">background_size</span><span class="s4">.</span><span class="s1">x</span><span class="s4">, </span><span class="s1">background_size</span><span class="s4">.</span><span class="s1">y</span><span class="s4">);</span>
+    <span class="s1">draw_image</span><span class="s4">(</span><span class="s1">middleground</span><span class="s4">, {</span><span class="s1">middleground_offset</span><span class="s4">,                     </span><span class="s1">background_y_offset</span><span class="s4">}, </span><span class="s1">background_size</span><span class="s4">.</span><span class="s1">x</span><span class="s4">, </span><span class="s1">background_size</span><span class="s4">.</span><span class="s1">y</span><span class="s4">);</span>
+
+    <span class="s1">draw_image</span><span class="s4">(</span><span class="s1">foreground</span><span class="s4">,   {</span><span class="s1">foreground_offset </span><span class="s4">+ </span><span class="s1">background_size</span><span class="s4">.</span><span class="s1">x</span><span class="s4">, </span><span class="s1">background_y_offset</span><span class="s4">},   </span><span class="s1">background_size</span><span class="s4">.</span><span class="s1">x</span><span class="s4">, </span><span class="s1">background_size</span><span class="s4">.</span><span class="s1">y</span><span class="s4">);</span>
+    <span class="s1">draw_image</span><span class="s4">(</span><span class="s1">foreground</span><span class="s4">,   {</span><span class="s1">foreground_offset</span><span class="s4">,                     </span><span class="s1">background_y_offset</span><span class="s4">},   </span><span class="s1">background_size</span><span class="s4">.</span><span class="s1">x</span><span class="s4">, </span><span class="s1">background_size</span><span class="s4">.</span><span class="s1">y</span><span class="s4">);</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">draw_game_overlay</span><span class="s4">() {</span>
+    <span class="s3">const float </span><span class="s1">ICON_SIZE </span><span class="s4">= </span><span class="s6">48.0f </span><span class="s4">* </span><span class="s1">screen_scale</span><span class="s4">;</span>
+
+    <span class="s3">float </span><span class="s1">slight_vertical_offset </span><span class="s4">= </span><span class="s6">8.0f</span><span class="s4">;</span>
+    <span class="s1">slight_vertical_offset </span><span class="s4">*= </span><span class="s1">screen_scale</span><span class="s4">;</span>
+
+    <span class="s5">// Hearts</span>
+    <span class="s3">for </span><span class="s4">(</span><span class="s3">int </span><span class="s1">i </span><span class="s4">= </span><span class="s6">0</span><span class="s4">; </span><span class="s1">i </span><span class="s4">&lt; </span><span class="s1">PlayerController::get_instance</span><span class="s4">().</span><span class="s1">player_lives</span><span class="s4">; </span><span class="s1">i</span><span class="s4">++) {</span>
+        <span class="s3">const float </span><span class="s1">SPACE_BETWEEN_HEARTS </span><span class="s4">= </span><span class="s6">4.0f </span><span class="s4">* </span><span class="s1">screen_scale</span><span class="s4">;</span>
+        <span class="s1">draw_image</span><span class="s4">(</span><span class="s1">heart_image</span><span class="s4">, {</span><span class="s1">ICON_SIZE </span><span class="s4">* </span><span class="s1">i </span><span class="s4">+ </span><span class="s1">SPACE_BETWEEN_HEARTS</span><span class="s4">, </span><span class="s1">slight_vertical_offset</span><span class="s4">}, </span><span class="s1">ICON_SIZE</span><span class="s4">);</span>
+    <span class="s4">}</span>
+
+    <span class="s5">// Timer</span>
+    <span class="s1">Vector2 timer_dimensions </span><span class="s4">= </span><span class="s1">MeasureTextEx</span><span class="s4">(</span><span class="s1">menu_font</span><span class="s4">, </span><span class="s1">std::to_string</span><span class="s4">(</span><span class="s1">timer </span><span class="s4">/ </span><span class="s6">60</span><span class="s4">).</span><span class="s1">c_str</span><span class="s4">(), </span><span class="s1">ICON_SIZE</span><span class="s4">, </span><span class="s6">2.0f</span><span class="s4">);</span>
+    <span class="s1">Vector2 timer_position </span><span class="s4">= {(</span><span class="s1">GetRenderWidth</span><span class="s4">() - </span><span class="s1">timer_dimensions</span><span class="s4">.</span><span class="s1">x</span><span class="s4">) * </span><span class="s6">0.5f</span><span class="s4">, </span><span class="s1">slight_vertical_offset</span><span class="s4">};</span>
+    <span class="s1">DrawTextEx</span><span class="s4">(</span><span class="s1">menu_font</span><span class="s4">, </span><span class="s1">std::to_string</span><span class="s4">(</span><span class="s1">timer </span><span class="s4">/ </span><span class="s6">60</span><span class="s4">).</span><span class="s1">c_str</span><span class="s4">(), </span><span class="s1">timer_position</span><span class="s4">, </span><span class="s1">ICON_SIZE</span><span class="s4">, </span><span class="s6">2.0f</span><span class="s4">, </span><span class="s1">WHITE</span><span class="s4">);</span>
+
+    <span class="s5">// Score</span>
+    <span class="s1">Vector2 score_dimensions </span><span class="s4">= </span><span class="s1">MeasureTextEx</span><span class="s4">(</span><span class="s1">menu_font</span><span class="s4">, </span><span class="s1">std::to_string</span><span class="s4">(</span><span class="s1">PlayerController::get_instance</span><span class="s4">().</span><span class="s1">get_total_player_score</span><span class="s4">()).</span><span class="s1">c_str</span><span class="s4">(), </span><span class="s1">ICON_SIZE</span><span class="s4">, </span><span class="s6">2.0f</span><span class="s4">);</span>
+    <span class="s1">Vector2 score_position </span><span class="s4">= {</span><span class="s1">GetRenderWidth</span><span class="s4">() - </span><span class="s1">score_dimensions</span><span class="s4">.</span><span class="s1">x </span><span class="s4">- </span><span class="s1">ICON_SIZE</span><span class="s4">, </span><span class="s1">slight_vertical_offset</span><span class="s4">};</span>
+    <span class="s1">DrawTextEx</span><span class="s4">(</span><span class="s1">menu_font</span><span class="s4">, </span><span class="s1">std::to_string</span><span class="s4">(</span><span class="s1">PlayerController::get_instance</span><span class="s4">().</span><span class="s1">get_total_player_score</span><span class="s4">()).</span><span class="s1">c_str</span><span class="s4">(), </span><span class="s1">score_position</span><span class="s4">, </span><span class="s1">ICON_SIZE</span><span class="s4">, </span><span class="s6">2.0f</span><span class="s4">, </span><span class="s1">WHITE</span><span class="s4">);</span>
+    <span class="s1">draw_sprite</span><span class="s4">(</span><span class="s1">coin_sprite</span><span class="s4">, {</span><span class="s1">GetRenderWidth</span><span class="s4">() - </span><span class="s1">ICON_SIZE</span><span class="s4">, </span><span class="s1">slight_vertical_offset</span><span class="s4">}, </span><span class="s1">ICON_SIZE</span><span class="s4">);</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">draw_level</span><span class="s4">() {</span>
+    <span class="s5">// Move the x-axis' center to the middle of the screen</span>
+    <span class="s1">horizontal_shift </span><span class="s4">= (</span><span class="s1">screen_size</span><span class="s4">.</span><span class="s1">x </span><span class="s4">- </span><span class="s1">cell_size</span><span class="s4">) / </span><span class="s6">2</span><span class="s4">;</span>
+
+    <span class="s3">for </span><span class="s4">(</span><span class="s1">size_t row </span><span class="s4">= </span><span class="s6">0</span><span class="s4">; </span><span class="s1">row </span><span class="s4">&lt; </span><span class="s1">current_level</span><span class="s4">.</span><span class="s1">get_rows</span><span class="s4">(); ++</span><span class="s1">row</span><span class="s4">) {</span>
+        <span class="s3">for </span><span class="s4">(</span><span class="s1">size_t column </span><span class="s4">= </span><span class="s6">0</span><span class="s4">; </span><span class="s1">column </span><span class="s4">&lt; </span><span class="s1">current_level</span><span class="s4">.</span><span class="s1">get_columns</span><span class="s4">(); ++</span><span class="s1">column</span><span class="s4">) {</span>
+
+            <span class="s1">Vector2 pos </span><span class="s4">= {</span>
+                    <span class="s5">// Move the level to the left as the player advances to the right,</span>
+                    <span class="s5">// shifting to the left to allow the player to be centered later</span>
+                    <span class="s4">(</span><span class="s3">static_cast</span><span class="s4">&lt;</span><span class="s3">float</span><span class="s4">&gt;(</span><span class="s1">column</span><span class="s4">) - </span><span class="s1">PlayerController::get_instance</span><span class="s4">().</span><span class="s1">player1</span><span class="s4">().</span><span class="s1">get_player_pos</span><span class="s4">().</span><span class="s1">x</span><span class="s4">) * </span><span class="s1">cell_size </span><span class="s4">+ </span><span class="s1">horizontal_shift</span><span class="s4">,</span>
+                    <span class="s3">static_cast</span><span class="s4">&lt;</span><span class="s3">float</span><span class="s4">&gt;(</span><span class="s1">row</span><span class="s4">) * </span><span class="s1">cell_size</span>
+            <span class="s4">};</span>
+
+            <span class="s5">// Draw the level itself</span>
+            <span class="s3">char </span><span class="s1">cell </span><span class="s4">= </span><span class="s1">LevelManager::get_instance</span><span class="s4">().</span><span class="s1">get_level_cell</span><span class="s4">(</span><span class="s1">row</span><span class="s4">, </span><span class="s1">column</span><span class="s4">);</span>
+            <span class="s3">switch </span><span class="s4">(</span><span class="s1">cell</span><span class="s4">) {</span>
+                <span class="s3">case </span><span class="s1">WALL:</span>
+                    <span class="s1">draw_image</span><span class="s4">(</span><span class="s1">wall_image</span><span class="s4">, </span><span class="s1">pos</span><span class="s4">, </span><span class="s1">cell_size</span><span class="s4">);</span>
+                    <span class="s3">break</span><span class="s4">;</span>
+                <span class="s3">case </span><span class="s1">WALL_DARK:</span>
+                    <span class="s1">draw_image</span><span class="s4">(</span><span class="s1">wall_dark_image</span><span class="s4">, </span><span class="s1">pos</span><span class="s4">, </span><span class="s1">cell_size</span><span class="s4">);</span>
+                    <span class="s3">break</span><span class="s4">;</span>
+                <span class="s3">case </span><span class="s1">SPIKE:</span>
+                    <span class="s1">draw_image</span><span class="s4">(</span><span class="s1">spike_image</span><span class="s4">, </span><span class="s1">pos</span><span class="s4">, </span><span class="s1">cell_size</span><span class="s4">);</span>
+                    <span class="s3">break</span><span class="s4">;</span>
+                <span class="s3">case </span><span class="s1">COIN:</span>
+                    <span class="s1">draw_sprite</span><span class="s4">(</span><span class="s1">coin_sprite</span><span class="s4">, </span><span class="s1">pos</span><span class="s4">, </span><span class="s1">cell_size</span><span class="s4">);</span>
+                    <span class="s3">break</span><span class="s4">;</span>
+                <span class="s3">case </span><span class="s1">EXIT:</span>
+                    <span class="s1">draw_image</span><span class="s4">(</span><span class="s1">exit_image</span><span class="s4">, </span><span class="s1">pos</span><span class="s4">, </span><span class="s1">cell_size</span><span class="s4">);</span>
+                    <span class="s3">break</span><span class="s4">;</span>
+                <span class="s3">default</span><span class="s1">:</span>
+                    <span class="s3">break</span><span class="s4">;</span>
+            <span class="s4">}</span>
+        <span class="s4">}</span>
+    <span class="s4">}</span>
+
+    <span class="s1">draw_player</span><span class="s4">();</span>
+    <span class="s1">draw_enemies</span><span class="s4">();</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">draw_player</span><span class="s4">() {</span>
+    <span class="s1">horizontal_shift </span><span class="s4">= (</span><span class="s1">screen_size</span><span class="s4">.</span><span class="s1">x </span><span class="s4">- </span><span class="s1">cell_size</span><span class="s4">) / </span><span class="s6">2</span><span class="s4">;</span>
+
+    <span class="s5">// Shift the camera to the center of the screen to allow to see what is in front of the player</span>
+    <span class="s1">Vector2 pos </span><span class="s4">= {</span>
+            <span class="s1">horizontal_shift</span><span class="s4">,</span>
+            <span class="s1">PlayerController::get_instance</span><span class="s4">().</span><span class="s1">player1</span><span class="s4">().</span><span class="s1">get_player_pos</span><span class="s4">().</span><span class="s1">y </span><span class="s4">* </span><span class="s1">cell_size</span>
+    <span class="s4">};</span>
+
+    <span class="s5">// Pick an appropriate sprite for the player</span>
+    <span class="s3">if </span><span class="s4">(</span><span class="s1">game_state </span><span class="s4">== </span><span class="s1">GAME_STATE</span><span class="s4">) {</span>
+        <span class="s3">if </span><span class="s4">(!</span><span class="s1">PlayerController::get_instance</span><span class="s4">().</span><span class="s1">player1</span><span class="s4">().</span><span class="s1">is_player_on_ground</span><span class="s4">()) {</span>
+            <span class="s1">draw_image</span><span class="s4">((</span><span class="s1">PlayerController::get_instance</span><span class="s4">().</span><span class="s1">player1</span><span class="s4">().</span><span class="s1">is_looking_forward</span><span class="s4">() </span><span class="s1">? player_jump_forward_image : player_jump_backwards_image</span><span class="s4">), </span><span class="s1">pos</span><span class="s4">, </span><span class="s1">cell_size</span><span class="s4">);</span>
+        <span class="s4">}</span>
+        <span class="s3">else if </span><span class="s4">(</span><span class="s1">PlayerController::get_instance</span><span class="s4">().</span><span class="s1">player1</span><span class="s4">().</span><span class="s1">is_moving</span><span class="s4">()) {</span>
+            <span class="s1">draw_sprite</span><span class="s4">((</span><span class="s1">PlayerController::get_instance</span><span class="s4">().</span><span class="s1">player1</span><span class="s4">().</span><span class="s1">is_looking_forward</span><span class="s4">() </span><span class="s1">? player_walk_forward_sprite : player_walk_backwards_sprite</span><span class="s4">), </span><span class="s1">pos</span><span class="s4">, </span><span class="s1">cell_size</span><span class="s4">);</span>
+            <span class="s1">PlayerController::get_instance</span><span class="s4">().</span><span class="s1">player1</span><span class="s4">().</span><span class="s1">set_moving</span><span class="s4">(</span><span class="s3">false</span><span class="s4">);</span>
+        <span class="s4">}</span>
+        <span class="s3">else </span><span class="s4">{</span>
+            <span class="s1">draw_image</span><span class="s4">((</span><span class="s1">PlayerController::get_instance</span><span class="s4">().</span><span class="s1">player1</span><span class="s4">().</span><span class="s1">is_looking_forward</span><span class="s4">() </span><span class="s1">? player_stand_forward_image : player_stand_backwards_image</span><span class="s4">), </span><span class="s1">pos</span><span class="s4">, </span><span class="s1">cell_size</span><span class="s4">);</span>
+        <span class="s4">}</span>
+    <span class="s4">}</span>
+    <span class="s3">else </span><span class="s4">{</span>
+        <span class="s1">draw_image</span><span class="s4">(</span><span class="s1">player_dead_image</span><span class="s4">, </span><span class="s1">pos</span><span class="s4">, </span><span class="s1">cell_size</span><span class="s4">);</span>
+    <span class="s4">}</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">draw_enemies</span><span class="s4">() {</span>
+    <span class="s5">// Go over all enemies and draw them, once again accounting to the player's movement and horizontal shift</span>
+    <span class="s3">for </span><span class="s4">(</span><span class="s3">auto </span><span class="s4">&amp;</span><span class="s1">enemy : EnemiesController::get_instance</span><span class="s4">().</span><span class="s1">get_enemies</span><span class="s4">()) {</span>
+        <span class="s1">horizontal_shift </span><span class="s4">= (</span><span class="s1">screen_size</span><span class="s4">.</span><span class="s1">x </span><span class="s4">- </span><span class="s1">cell_size</span><span class="s4">) / </span><span class="s6">2</span><span class="s4">;</span>
+
+        <span class="s1">Vector2 pos </span><span class="s4">= {</span>
+                <span class="s4">(</span><span class="s1">enemy</span><span class="s4">.</span><span class="s1">get_pos</span><span class="s4">().</span><span class="s1">x </span><span class="s4">- </span><span class="s1">PlayerController::get_instance</span><span class="s4">().</span><span class="s1">player1</span><span class="s4">().</span><span class="s1">get_player_pos</span><span class="s4">().</span><span class="s1">x</span><span class="s4">) * </span><span class="s1">cell_size </span><span class="s4">+ </span><span class="s1">horizontal_shift</span><span class="s4">,</span>
+                <span class="s1">enemy</span><span class="s4">.</span><span class="s1">get_pos</span><span class="s4">().</span><span class="s1">y </span><span class="s4">* </span><span class="s1">cell_size</span>
+        <span class="s4">};</span>
+
+        <span class="s1">draw_sprite</span><span class="s4">(</span><span class="s1">enemy_walk</span><span class="s4">, </span><span class="s1">pos</span><span class="s4">, </span><span class="s1">cell_size</span><span class="s4">);</span>
+    <span class="s4">}</span>
+<span class="s4">}</span>
+
+<span class="s5">// Menus</span>
+<span class="s3">void </span><span class="s1">draw_menu</span><span class="s4">() {</span>
+    <span class="s1">draw_text</span><span class="s4">(</span><span class="s1">game_title</span><span class="s4">);</span>
+    <span class="s1">draw_text</span><span class="s4">(</span><span class="s1">game_subtitle</span><span class="s4">);</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">draw_pause_menu</span><span class="s4">() {</span>
+    <span class="s1">draw_text</span><span class="s4">(</span><span class="s1">game_paused</span><span class="s4">);</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">draw_death_screen</span><span class="s4">() {</span>
+    <span class="s1">draw_parallax_background</span><span class="s4">();</span>
+    <span class="s1">draw_level</span><span class="s4">();</span>
+    <span class="s1">draw_game_overlay</span><span class="s4">();</span>
+    <span class="s1">DrawRectangle</span><span class="s4">(</span><span class="s6">0</span><span class="s4">, </span><span class="s6">0</span><span class="s4">, </span><span class="s1">GetRenderWidth</span><span class="s4">(), </span><span class="s1">GetRenderHeight</span><span class="s4">(), {</span><span class="s6">0</span><span class="s4">, </span><span class="s6">0</span><span class="s4">, </span><span class="s6">0</span><span class="s4">, </span><span class="s6">100</span><span class="s4">});</span>
+    <span class="s1">draw_text</span><span class="s4">(</span><span class="s1">death_title</span><span class="s4">);</span>
+    <span class="s1">draw_text</span><span class="s4">(</span><span class="s1">death_subtitle</span><span class="s4">);</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">draw_game_over_menu</span><span class="s4">() {</span>
+    <span class="s1">draw_text</span><span class="s4">(</span><span class="s1">game_over_title</span><span class="s4">);</span>
+    <span class="s1">draw_text</span><span class="s4">(</span><span class="s1">game_over_subtitle</span><span class="s4">);</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">create_victory_menu_background</span><span class="s4">() {</span>
+    <span class="s3">for </span><span class="s4">(</span><span class="s3">auto </span><span class="s4">&amp;</span><span class="s1">ball : victory_balls</span><span class="s4">) {</span>
+        <span class="s1">ball</span><span class="s4">.</span><span class="s1">x  </span><span class="s4">= </span><span class="s1">rand_up_to</span><span class="s4">(</span><span class="s1">screen_size</span><span class="s4">.</span><span class="s1">x</span><span class="s4">);</span>
+        <span class="s1">ball</span><span class="s4">.</span><span class="s1">y  </span><span class="s4">= </span><span class="s1">rand_up_to</span><span class="s4">(</span><span class="s1">screen_size</span><span class="s4">.</span><span class="s1">y</span><span class="s4">);</span>
+        <span class="s1">ball</span><span class="s4">.</span><span class="s1">dx </span><span class="s4">= </span><span class="s1">rand_from_to</span><span class="s4">(-</span><span class="s1">VICTORY_BALL_MAX_SPEED</span><span class="s4">, </span><span class="s1">VICTORY_BALL_MAX_SPEED</span><span class="s4">);</span>
+        <span class="s1">ball</span><span class="s4">.</span><span class="s1">dx </span><span class="s4">*= </span><span class="s1">screen_scale</span><span class="s4">;</span>
+        <span class="s3">if </span><span class="s4">(</span><span class="s1">abs</span><span class="s4">(</span><span class="s1">ball</span><span class="s4">.</span><span class="s1">dx</span><span class="s4">) &lt; </span><span class="s6">0E-1</span><span class="s4">) </span><span class="s1">ball</span><span class="s4">.</span><span class="s1">dx </span><span class="s4">= </span><span class="s6">1.0f</span><span class="s4">;</span>
+        <span class="s1">ball</span><span class="s4">.</span><span class="s1">dy </span><span class="s4">= </span><span class="s1">rand_from_to</span><span class="s4">(-</span><span class="s1">VICTORY_BALL_MAX_SPEED</span><span class="s4">, </span><span class="s1">VICTORY_BALL_MAX_SPEED</span><span class="s4">);</span>
+        <span class="s1">ball</span><span class="s4">.</span><span class="s1">dy </span><span class="s4">*= </span><span class="s1">screen_scale</span><span class="s4">;</span>
+        <span class="s3">if </span><span class="s4">(</span><span class="s1">abs</span><span class="s4">(</span><span class="s1">ball</span><span class="s4">.</span><span class="s1">dy</span><span class="s4">) &lt; </span><span class="s6">0E-1</span><span class="s4">) </span><span class="s1">ball</span><span class="s4">.</span><span class="s1">dy </span><span class="s4">= </span><span class="s6">1.0f</span><span class="s4">;</span>
+        <span class="s1">ball</span><span class="s4">.</span><span class="s1">radius </span><span class="s4">= </span><span class="s1">rand_from_to</span><span class="s4">(</span><span class="s1">VICTORY_BALL_MIN_RADIUS</span><span class="s4">, </span><span class="s1">VICTORY_BALL_MAX_RADIUS</span><span class="s4">);</span>
+        <span class="s1">ball</span><span class="s4">.</span><span class="s1">radius </span><span class="s4">*= </span><span class="s1">screen_scale</span><span class="s4">;</span>
+    <span class="s4">}</span>
+
+    <span class="s5">/* Clear both the front buffer and the back buffer to avoid ghosting of the game graphics. */</span>
+    <span class="s1">ClearBackground</span><span class="s4">(</span><span class="s1">BLACK</span><span class="s4">);</span>
+    <span class="s1">EndDrawing</span><span class="s4">();</span>
+    <span class="s1">BeginDrawing</span><span class="s4">();</span>
+    <span class="s1">ClearBackground</span><span class="s4">(</span><span class="s1">BLACK</span><span class="s4">);</span>
+    <span class="s1">EndDrawing</span><span class="s4">();</span>
+    <span class="s1">BeginDrawing</span><span class="s4">();</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">animate_victory_menu_background</span><span class="s4">() {</span>
+    <span class="s3">for </span><span class="s4">(</span><span class="s3">auto </span><span class="s4">&amp;</span><span class="s1">ball : victory_balls</span><span class="s4">) {</span>
+        <span class="s1">ball</span><span class="s4">.</span><span class="s1">x </span><span class="s4">+= </span><span class="s1">ball</span><span class="s4">.</span><span class="s1">dx</span><span class="s4">;</span>
+        <span class="s3">if </span><span class="s4">(</span><span class="s1">ball</span><span class="s4">.</span><span class="s1">x </span><span class="s4">- </span><span class="s1">ball</span><span class="s4">.</span><span class="s1">radius </span><span class="s4">&lt; </span><span class="s6">0 </span><span class="s4">||</span>
+            <span class="s1">ball</span><span class="s4">.</span><span class="s1">x </span><span class="s4">+ </span><span class="s1">ball</span><span class="s4">.</span><span class="s1">radius </span><span class="s4">&gt;= </span><span class="s1">screen_size</span><span class="s4">.</span><span class="s1">x</span><span class="s4">) {</span>
+            <span class="s1">ball</span><span class="s4">.</span><span class="s1">dx </span><span class="s4">= -</span><span class="s1">ball</span><span class="s4">.</span><span class="s1">dx</span><span class="s4">;</span>
+        <span class="s4">}</span>
+        <span class="s1">ball</span><span class="s4">.</span><span class="s1">y </span><span class="s4">+= </span><span class="s1">ball</span><span class="s4">.</span><span class="s1">dy</span><span class="s4">;</span>
+        <span class="s3">if </span><span class="s4">(</span><span class="s1">ball</span><span class="s4">.</span><span class="s1">y </span><span class="s4">- </span><span class="s1">ball</span><span class="s4">.</span><span class="s1">radius </span><span class="s4">&lt; </span><span class="s6">0 </span><span class="s4">||</span>
+            <span class="s1">ball</span><span class="s4">.</span><span class="s1">y </span><span class="s4">+ </span><span class="s1">ball</span><span class="s4">.</span><span class="s1">radius </span><span class="s4">&gt;= </span><span class="s1">screen_size</span><span class="s4">.</span><span class="s1">y</span><span class="s4">) {</span>
+            <span class="s1">ball</span><span class="s4">.</span><span class="s1">dy </span><span class="s4">= -</span><span class="s1">ball</span><span class="s4">.</span><span class="s1">dy</span><span class="s4">;</span>
+        <span class="s4">}</span>
+    <span class="s4">}</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">draw_victory_menu_background</span><span class="s4">() {</span>
+    <span class="s3">for </span><span class="s4">(</span><span class="s3">auto </span><span class="s4">&amp;</span><span class="s1">ball : victory_balls</span><span class="s4">) {</span>
+        <span class="s1">DrawCircleV</span><span class="s4">({ </span><span class="s1">ball</span><span class="s4">.</span><span class="s1">x</span><span class="s4">, </span><span class="s1">ball</span><span class="s4">.</span><span class="s1">y </span><span class="s4">}, </span><span class="s1">ball</span><span class="s4">.</span><span class="s1">radius</span><span class="s4">, </span><span class="s1">VICTORY_BALL_COLOR</span><span class="s4">);</span>
+    <span class="s4">}</span>
+<span class="s4">}</span>
+
+<span class="s3">void </span><span class="s1">draw_victory_menu</span><span class="s4">() {</span>
+    <span class="s1">DrawRectangle</span><span class="s4">(</span>
+        <span class="s6">0</span><span class="s4">, </span><span class="s6">0</span><span class="s4">,</span>
+        <span class="s3">static_cast</span><span class="s4">&lt;</span><span class="s3">int</span><span class="s4">&gt;(</span><span class="s1">screen_size</span><span class="s4">.</span><span class="s1">x</span><span class="s4">), </span><span class="s3">static_cast</span><span class="s4">&lt;</span><span class="s3">int</span><span class="s4">&gt;(</span><span class="s1">screen_size</span><span class="s4">.</span><span class="s1">y</span><span class="s4">),</span>
+        <span class="s4">{ </span><span class="s6">0</span><span class="s4">, </span><span class="s6">0</span><span class="s4">, </span><span class="s6">0</span><span class="s4">, </span><span class="s1">VICTORY_BALL_TRAIL_TRANSPARENCY </span><span class="s4">}</span>
+    <span class="s4">);</span>
+
+    <span class="s1">animate_victory_menu_background</span><span class="s4">();</span>
+    <span class="s1">draw_victory_menu_background</span><span class="s4">();</span>
+
+    <span class="s1">draw_text</span><span class="s4">(</span><span class="s1">victory_title</span><span class="s4">);</span>
+    <span class="s1">draw_text</span><span class="s4">(</span><span class="s1">victory_subtitle</span><span class="s4">);</span>
+<span class="s4">}</span>
+
+<span class="s0">#endif </span><span class="s5">//GRAPHICS_H</span>
+</pre>
+</body>
+</html>

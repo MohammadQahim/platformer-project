@@ -1,0 +1,52 @@
+<html>
+<head>
+<title>enemy.h</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #b3ae60;}
+.s1 { color: #bcbec4;}
+.s2 { color: #cf8e6d;}
+.s3 { color: #bcbec4;}
+.s4 { color: #7a7e85;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+enemy.h</font>
+</center></td></tr></table>
+<pre><span class="s0">#ifndef </span><span class="s1">ENEMY_H</span>
+<span class="s0">#define </span><span class="s1">ENEMY_H</span>
+
+<span class="s2">class </span><span class="s1">Enemy</span>
+<span class="s3">{</span>
+<span class="s2">public</span><span class="s1">:</span>
+    <span class="s1">Enemy</span><span class="s3">(</span><span class="s2">const </span><span class="s1">Vector2 </span><span class="s3">&amp;</span><span class="s1">pos</span><span class="s3">, </span><span class="s2">const bool </span><span class="s1">is_looking_right</span><span class="s3">)</span>
+        <span class="s1">: pos</span><span class="s3">{</span><span class="s1">pos</span><span class="s3">}, </span><span class="s1">looking_right</span><span class="s3">{</span><span class="s1">is_looking_right</span><span class="s3">} { }</span>
+
+    <span class="s3">[[</span><span class="s1">nodiscard</span><span class="s3">]] </span><span class="s1">Vector2 get_pos</span><span class="s3">() </span><span class="s2">const </span><span class="s3">{</span>
+        <span class="s2">return </span><span class="s1">pos</span><span class="s3">;</span>
+    <span class="s3">}</span>
+
+    <span class="s3">[[</span><span class="s1">nodiscard</span><span class="s3">]] </span><span class="s2">bool </span><span class="s1">is_looking_right</span><span class="s3">() </span><span class="s2">const </span><span class="s3">{</span>
+        <span class="s2">return </span><span class="s1">looking_right</span><span class="s3">;</span>
+    <span class="s3">}</span>
+
+    <span class="s2">void </span><span class="s1">set_pos</span><span class="s3">(</span><span class="s2">const </span><span class="s1">Vector2 </span><span class="s3">&amp;</span><span class="s1">pos</span><span class="s3">) {</span>
+        <span class="s2">this</span><span class="s3">-&gt;</span><span class="s1">pos </span><span class="s3">= </span><span class="s1">pos</span><span class="s3">;</span>
+    <span class="s3">}</span>
+
+    <span class="s2">void </span><span class="s1">set_looking_right</span><span class="s3">(</span><span class="s2">const bool </span><span class="s1">looking_right</span><span class="s3">) {</span>
+        <span class="s2">this</span><span class="s3">-&gt;</span><span class="s1">looking_right </span><span class="s3">= </span><span class="s1">looking_right</span><span class="s3">;</span>
+    <span class="s3">}</span>
+
+<span class="s2">private</span><span class="s1">:</span>
+    <span class="s1">Vector2 pos</span><span class="s3">;</span>
+    <span class="s2">bool </span><span class="s1">looking_right</span><span class="s3">;</span>
+
+<span class="s3">};</span>
+<span class="s0">#endif </span><span class="s4">//ENEMY_H</span>
+</pre>
+</body>
+</html>
